@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { createChart, ColorType, IChartApi, AreaSeries } from "lightweight-charts";
 import { TimeSeriesPoint } from "@/types/macro";
+import { useChartSync } from "./ChartSyncContext";
 
 interface MacroChartProps {
   data: TimeSeriesPoint[];
@@ -13,6 +14,8 @@ interface MacroChartProps {
 export function MacroChart({ data, color, height = 280 }: MacroChartProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const chartRef = useRef<IChartApi | null>(null);
+  const chartId = useId();
+  const sync = useChartSync();
 
   useEffect(() => {
     if (!containerRef.current || data.length === 0) return;
@@ -53,6 +56,16 @@ export function MacroChart({ data, color, height = 280 }: MacroChartProps) {
     chart.timeScale().fitContent();
     chartRef.current = chart;
 
+    if (sync) {
+      sync.registerChart(chartId, { chart, series: areaSeries });
+
+      chart.subscribeCrosshairMove((param) => {
+        const time = param.time as string | undefined;
+        const point = param.point;
+        sync.handleCrosshairMove(chartId, time, point);
+      });
+    }
+
     const resizeObserver = new ResizeObserver((entries) => {
       for (const entry of entries) {
         chart.applyOptions({ width: entry.contentRect.width });
@@ -61,11 +74,14 @@ export function MacroChart({ data, color, height = 280 }: MacroChartProps) {
     resizeObserver.observe(containerRef.current);
 
     return () => {
+      if (sync) {
+        sync.unregisterChart(chartId);
+      }
       resizeObserver.disconnect();
       chart.remove();
       chartRef.current = null;
     };
-  }, [data, color, height]);
+  }, [data, color, height, chartId, sync]);
 
   return <div ref={containerRef} />;
 }

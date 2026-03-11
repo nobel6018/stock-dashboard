@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { MacroChart } from "./MacroChart";
 import { PeriodSelector } from "./PeriodSelector";
+import { useChartSync } from "./ChartSyncContext";
 import { MacroIndicator, TimeSeriesPoint } from "@/types/macro";
 import { formatNumber, formatChange } from "@/lib/utils/formatters";
 
@@ -12,9 +13,9 @@ interface ChartCardProps {
 
 export function ChartCard({ indicator }: ChartCardProps) {
   const [data, setData] = useState<TimeSeriesPoint[]>([]);
-  const [period, setPeriod] = useState("1Y");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { period, setPeriod } = useChartSync()!;
 
   const fetchData = useCallback(async () => {
     setLoading(true);
