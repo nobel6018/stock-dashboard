@@ -29,8 +29,13 @@ interface ChartSyncContextValue {
 
 const ChartSyncContext = createContext<ChartSyncContextValue | null>(null);
 
-export function ChartSyncProvider({ children }: { children: ReactNode }) {
-  const [period, setPeriod] = useState("1Y");
+interface ChartSyncProviderProps {
+  children: ReactNode;
+  defaultPeriod?: string;
+}
+
+export function ChartSyncProvider({ children, defaultPeriod = "1Y" }: ChartSyncProviderProps) {
+  const [period, setPeriod] = useState(defaultPeriod);
   const chartsRef = useRef<Map<string, ChartEntry>>(new Map());
   const syncingRef = useRef(false);
 

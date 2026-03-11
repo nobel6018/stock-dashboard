@@ -6,6 +6,7 @@ import { SectorBar } from "@/components/market/SectorBar";
 import { FundFlowChart } from "@/components/market/FundFlowChart";
 import { IndicesTable } from "@/components/market/IndicesTable";
 import { SectorHeatmap } from "@/components/market/SectorHeatmap";
+import { ChartSyncProvider } from "@/components/charts/ChartSyncContext";
 
 export default function MarketPage() {
   return (
@@ -22,29 +23,31 @@ export default function MarketPage() {
         <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-zinc-500">
           거시 시그널
         </h2>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-            <h3 className="mb-2 text-sm font-medium text-zinc-400">
-              Fear & Greed Index
-            </h3>
-            <FearGreedGauge />
+        <ChartSyncProvider>
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-3">
+            <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+              <h3 className="mb-2 text-sm font-medium text-zinc-400">
+                Fear & Greed Index
+              </h3>
+              <FearGreedGauge />
+            </div>
+            <MacroSignalCard
+              title="VIX 공포지수"
+              seriesId="vix"
+              unit=""
+              color="#f87171"
+              warningThreshold={20}
+              dangerThreshold={30}
+            />
+            <MacroSignalCard
+              title="장단기 금리차 (10Y-2Y)"
+              seriesId="yield-spread"
+              unit="%"
+              color="#818cf8"
+              defaultPeriod="3Y"
+            />
           </div>
-          <MacroSignalCard
-            title="VIX 공포지수"
-            seriesId="vix"
-            unit=""
-            color="#f87171"
-            warningThreshold={20}
-            dangerThreshold={30}
-          />
-          <MacroSignalCard
-            title="장단기 금리차 (10Y-2Y)"
-            seriesId="yield-spread"
-            unit="%"
-            color="#818cf8"
-            period="3Y"
-          />
-        </div>
+        </ChartSyncProvider>
       </section>
 
       {/* Section 2: 중간 흐름 */}

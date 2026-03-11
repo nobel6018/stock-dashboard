@@ -103,6 +103,6 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     source: "fred",
     unit: "%",
     color: "#818cf8",
-    description: "미국 10년-2년 국채 금리 스프레드",
+    description: "10년물-2년물 국채 금리 차이. 양수(정상): 경기 확장 기대. 축소→0 근접: 경기 둔화 신호. 음수(역전): 역사적으로 6~18개월 내 경기침체 선행지표. 역전 후 다시 양수로 전환되는 시점이 침체 직전인 경우가 많음.",
   },
 ];
