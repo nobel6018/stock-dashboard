@@ -75,4 +75,14 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     color: "#a78bfa",
     description: "브렌트유",
   },
+  {
+    id: "bitcoin",
+    name: "Bitcoin",
+    nameKo: "비트코인",
+    seriesId: "CBBTCUSD",
+    source: "fred",
+    unit: "$",
+    color: "#f7931a",
+    description: "비트코인 (Coinbase USD)",
+  },
 ];

@@ -11,6 +11,9 @@ export function formatNumber(value: number, unit: string): string {
   if (unit === "%") {
     return `${value.toFixed(2)}%`;
   }
+  if (unit === "$") {
+    return `$${value.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
+  }
   if (unit === "$/bbl") {
     return `$${value.toFixed(2)}`;
   }
