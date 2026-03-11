@@ -1,0 +1,15 @@
+{
+  "lastUpdated": "2026-03-05",
+  "source": "ICI Weekly Fund Flows (manual)",
+  "data": [
+    { "week": "2026-01-08", "equity": 12.3, "bond": 5.1, "money": -3.2 },
+    { "week": "2026-01-15", "equity": -8.7, "bond": 7.2, "money": 2.1 },
+    { "week": "2026-01-22", "equity": 15.4, "bond": 3.8, "money": -5.6 },
+    { "week": "2026-01-29", "equity": 6.1, "bond": -2.4, "money": 1.8 },
+    { "week": "2026-02-05", "equity": -3.5, "bond": 8.9, "money": -1.2 },
+    { "week": "2026-02-12", "equity": 9.8, "bond": 4.3, "money": -2.7 },
+    { "week": "2026-02-19", "equity": -11.2, "bond": 6.7, "money": 4.5 },
+    { "week": "2026-02-26", "equity": 7.6, "bond": -1.8, "money": 0.9 },
+    { "week": "2026-03-05", "equity": 4.2, "bond": 3.1, "money": -0.8 }
+  ]
+}
