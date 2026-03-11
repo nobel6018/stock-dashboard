@@ -47,7 +47,7 @@ export function ChartCard({ indicator }: ChartCardProps) {
     <div className="flex flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
       <div className="mb-3 flex items-start justify-between">
         <div>
-          <h3 className="text-sm font-medium text-zinc-400">
+          <h3 className="text-sm font-medium text-zinc-400" title={indicator.description}>
             {indicator.nameKo}
           </h3>
           <div className="mt-1 flex items-baseline gap-2">

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { MacroChart } from "@/components/charts/MacroChart";
+import { PeriodSelector } from "@/components/charts/PeriodSelector";
 import { TimeSeriesPoint } from "@/types/macro";
 
 interface MacroSignalCardProps {
@@ -9,7 +10,7 @@ interface MacroSignalCardProps {
   seriesId: string;
   unit: string;
   color: string;
-  period?: string;
+  defaultPeriod?: string;
   warningThreshold?: number;
   dangerThreshold?: number;
   showZeroLine?: boolean;
@@ -20,12 +21,13 @@ export function MacroSignalCard({
   seriesId,
   unit,
   color,
-  period = "1Y",
+  defaultPeriod = "1Y",
   warningThreshold,
   dangerThreshold,
 }: MacroSignalCardProps) {
   const [data, setData] = useState<TimeSeriesPoint[]>([]);
   const [loading, setLoading] = useState(true);
+  const [period, setPeriod] = useState(defaultPeriod);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -66,15 +68,18 @@ export function MacroSignalCard({
 
   return (
     <div className="flex flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-      <div className="mb-2">
-        <h3 className="text-sm font-medium text-zinc-400">{title}</h3>
-        {currentValue !== null ? (
-          <div className={`mt-1 text-2xl font-semibold ${valueColor}`}>
-            {formatValue(currentValue)}
-          </div>
-        ) : (
-          <div className="mt-1 text-2xl text-zinc-600">—</div>
-        )}
+      <div className="mb-2 flex items-start justify-between">
+        <div>
+          <h3 className="text-sm font-medium text-zinc-400">{title}</h3>
+          {currentValue !== null ? (
+            <div className={`mt-1 text-2xl font-semibold ${valueColor}`}>
+              {formatValue(currentValue)}
+            </div>
+          ) : (
+            <div className="mt-1 text-2xl text-zinc-600">—</div>
+          )}
+        </div>
+        <PeriodSelector selected={period} onChange={setPeriod} />
       </div>
 
       <div className="relative min-h-[200px]">
