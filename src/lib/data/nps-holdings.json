@@ -374,5 +374,277 @@
         "ownershipPct": 6.94
       }
     ]
+  },
+  "foreignBonds": {
+    "referenceDate": "2024-12-31",
+    "totalCount": 8588,
+    "top20": [
+      {
+        "rank": 1,
+        "name": "U S TREASURY NOTE3.875% 08/15/2034 DD 08/15/24",
+        "type": "TREASURIES",
+        "valueBillion": 1602.9,
+        "weight": 1.81
+      },
+      {
+        "rank": 2,
+        "name": "U S TREASURY BOND4.250% 08/15/2054 DD 08/15/24",
+        "type": "TREASURIES",
+        "valueBillion": 666.7,
+        "weight": 0.75
+      },
+      {
+        "rank": 3,
+        "name": "U S TREASURY BOND4.375% 08/15/2043 DD 08/15/23",
+        "type": "TREASURIES",
+        "valueBillion": 561,
+        "weight": 0.63
+      },
+      {
+        "rank": 4,
+        "name": "JAPAN GOVERNMENT TWO YEAR BOND0.400% 08/01/2026",
+        "type": "TREASURIES",
+        "valueBillion": 530.8,
+        "weight": 0.6
+      },
+      {
+        "rank": 5,
+        "name": "U S TREASURY NOTE4.500% 11/15/2033 DD 11/15/23",
+        "type": "TREASURIES",
+        "valueBillion": 469.8,
+        "weight": 0.53
+      },
+      {
+        "rank": 6,
+        "name": "UNITED KINGDOM GILT REGS4.250% 07/31/2034",
+        "type": "TREASURIES",
+        "valueBillion": 464,
+        "weight": 0.52
+      },
+      {
+        "rank": 7,
+        "name": "U S TREASURY NOTE3.500% 09/30/2029 DD 09/30/24",
+        "type": "TREASURIES",
+        "valueBillion": 442.6,
+        "weight": 0.5
+      },
+      {
+        "rank": 8,
+        "name": "FRENCH REPUBLIC GOVERNMEN 144A2.750% 02/25/2029",
+        "type": "TREASURIES",
+        "valueBillion": 433.9,
+        "weight": 0.49
+      },
+      {
+        "rank": 9,
+        "name": "CHINA GOVERNMENT BOND2.620% 06/25/2030",
+        "type": "TREASURIES",
+        "valueBillion": 409.7,
+        "weight": 0.46
+      },
+      {
+        "rank": 10,
+        "name": "U S TREASURY NOTE4.625% 09/30/2028 DD 09/30/23",
+        "type": "TREASURIES",
+        "valueBillion": 401.1,
+        "weight": 0.45
+      },
+      {
+        "rank": 11,
+        "name": "U S TREASURY NOTE4.250% 03/15/2027 DD 03/15/24",
+        "type": "TREASURIES",
+        "valueBillion": 384,
+        "weight": 0.43
+      },
+      {
+        "rank": 12,
+        "name": "U S TREASURY NOTE4.375% 08/31/2028 DD 08/31/23",
+        "type": "TREASURIES",
+        "valueBillion": 380.7,
+        "weight": 0.43
+      },
+      {
+        "rank": 13,
+        "name": "JAPAN GOVERNMENT TEN YEAR BOND1.100% 06/20/2034",
+        "type": "TREASURIES",
+        "valueBillion": 373.7,
+        "weight": 0.42
+      },
+      {
+        "rank": 14,
+        "name": "FRENCH REPUBLIC GOVERNMEN 144A2.500% 09/24/2027",
+        "type": "TREASURIES",
+        "valueBillion": 364.8,
+        "weight": 0.41
+      },
+      {
+        "rank": 15,
+        "name": "CHINA GOVERNMENT BOND2.680% 05/21/2030",
+        "type": "TREASURIES",
+        "valueBillion": 334.6,
+        "weight": 0.38
+      },
+      {
+        "rank": 16,
+        "name": "JAPAN GOVERNMENT TWO YEAR BOND0.400% 07/01/2026",
+        "type": "TREASURIES",
+        "valueBillion": 327.3,
+        "weight": 0.37
+      },
+      {
+        "rank": 17,
+        "name": "SPAIN GOVERNMENT BOND 144A3.450% 10/31/2034",
+        "type": "TREASURIES",
+        "valueBillion": 323.7,
+        "weight": 0.37
+      },
+      {
+        "rank": 18,
+        "name": "U S TREASURY NOTE3.875% 10/15/2027 DD 10/15/24",
+        "type": "TREASURIES",
+        "valueBillion": 322.7,
+        "weight": 0.36
+      },
+      {
+        "rank": 19,
+        "name": "ITALY BUONI POLIENNALI DE 144A4.500% 10/01/2053",
+        "type": "TREASURIES",
+        "valueBillion": 318.7,
+        "weight": 0.36
+      },
+      {
+        "rank": 20,
+        "name": "ITALY BUONI POLIENNALI DE REGS3.850% 02/01/2035",
+        "type": "TREASURIES",
+        "valueBillion": 315.3,
+        "weight": 0.36
+      }
+    ]
+  },
+  "domesticBonds": {
+    "referenceDate": "2024-12-31",
+    "totalCount": 507,
+    "top20": [
+      {
+        "rank": 1,
+        "name": "국채",
+        "valueBillion": 149504.2,
+        "weight": 45.3
+      },
+      {
+        "rank": 2,
+        "name": "한국주택금융공사",
+        "valueBillion": 27305.9,
+        "weight": 8.3
+      },
+      {
+        "rank": 3,
+        "name": "한국전력공사",
+        "valueBillion": 15487.6,
+        "weight": 4.7
+      },
+      {
+        "rank": 4,
+        "name": "한국은행",
+        "valueBillion": 11779.6,
+        "weight": 3.6
+      },
+      {
+        "rank": 5,
+        "name": "한국산업은행",
+        "valueBillion": 5138.6,
+        "weight": 1.6
+      },
+      {
+        "rank": 6,
+        "name": "한국토지주택공사",
+        "valueBillion": 5043.3,
+        "weight": 1.5
+      },
+      {
+        "rank": 7,
+        "name": "한국가스공사",
+        "valueBillion": 3447.8,
+        "weight": 1
+      },
+      {
+        "rank": 8,
+        "name": "한국도로공사",
+        "valueBillion": 3349.7,
+        "weight": 1
+      },
+      {
+        "rank": 9,
+        "name": "중소기업은행",
+        "valueBillion": 3314.7,
+        "weight": 1
+      },
+      {
+        "rank": 10,
+        "name": "서울특별시",
+        "valueBillion": 3158.2,
+        "weight": 1
+      },
+      {
+        "rank": 11,
+        "name": "농협은행",
+        "valueBillion": 2833.1,
+        "weight": 0.9
+      },
+      {
+        "rank": 12,
+        "name": "국가철도공단",
+        "valueBillion": 2696.2,
+        "weight": 0.8
+      },
+      {
+        "rank": 13,
+        "name": "농협중앙회",
+        "valueBillion": 2693.4,
+        "weight": 0.8
+      },
+      {
+        "rank": 14,
+        "name": "신한카드",
+        "valueBillion": 2693.1,
+        "weight": 0.8
+      },
+      {
+        "rank": 15,
+        "name": "한국철도공사",
+        "valueBillion": 2556.3,
+        "weight": 0.8
+      },
+      {
+        "rank": 16,
+        "name": "경기도",
+        "valueBillion": 2531.6,
+        "weight": 0.8
+      },
+      {
+        "rank": 17,
+        "name": "현대캐피탈",
+        "valueBillion": 2159.7,
+        "weight": 0.7
+      },
+      {
+        "rank": 18,
+        "name": "삼성카드",
+        "valueBillion": 2146.3,
+        "weight": 0.7
+      },
+      {
+        "rank": 19,
+        "name": "하나은행",
+        "valueBillion": 1882.4,
+        "weight": 0.6
+      },
+      {
+        "rank": 20,
+        "name": "현대카드",
+        "valueBillion": 1569.3,
+        "weight": 0.5
+      }
+    ]
   }
 }

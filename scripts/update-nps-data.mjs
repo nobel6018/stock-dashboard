@@ -3,10 +3,12 @@
 /**
  * 국민연금 투자정보 업데이트 스크립트
  *
- * 3개 API 데이터를 가져와 nps-holdings.json에 저장:
+ * 5개 API 데이터를 가져와 nps-holdings.json에 저장:
  * 1. 기금 포트폴리오 현황 (자산배분 + 연도별 추이)
  * 2. 해외주식 투자정보 (종목별 Top 20)
  * 3. 국내주식 투자정보 (종목별 Top 20)
+ * 4. 해외채권 투자정보 (종목별 Top 20)
+ * 5. 국내채권 투자정보 (발행기관별 Top 20)
  *
  * 실행: npm run update-nps
  */
@@ -35,20 +37,27 @@ const OUTPUT_PATH = resolve(ROOT, "src/lib/data/nps-holdings.json");
 const PORTFOLIO_ENDPOINTS = [
   { date: "2025-05", uddi: "uddi:c4d6ba7c-c8d8-457c-9084-b2a6eb3c68ec", ns: "15106894" },
   { date: "2025-04", uddi: "uddi:635a5f3a-507c-4faf-8408-a04b61123a06", ns: "15106894" },
-  { date: "2025-03", uddi: "uddi:afde37f7-7d92-46d4-8448-901d5299de28", ns: "15106894" },
   { date: "2024-12", uddi: "uddi:bc5d04c0-0b01-47be-a59c-dacda4b5eefc", ns: "15106894" },
 ];
 
 // 해외주식 투자정보 (연말 기준, 최신순)
 const FOREIGN_STOCK_ENDPOINTS = [
   { year: "2024", uddi: "uddi:dce2f590-06d2-4b82-8e7c-c692cda6e9fd", ns: "3070517" },
-  { year: "2023", uddi: "uddi:cbf4387f-ef66-47d5-a49d-b197ce67a88f", ns: "3070517" },
 ];
 
 // 국내주식 투자정보 (연말 기준, 최신순)
 const DOMESTIC_STOCK_ENDPOINTS = [
   { year: "2024", uddi: "uddi:cc757223-fdc0-45b2-a617-dcbecec3fe1f", ns: "3070507" },
-  { year: "2023", uddi: "uddi:b2092461-47fb-4571-b3b0-86c96df25dfa", ns: "3070507" },
+];
+
+// 해외채권 투자정보 (연말 기준, 최신순)
+const FOREIGN_BOND_ENDPOINTS = [
+  { year: "2024", uddi: "uddi:dd9efc4c-3f99-4d19-afa7-b63e3cc4d70d", ns: "15044505" },
+];
+
+// 국내채권 투자정보 (연말 기준, 최신순)
+const DOMESTIC_BOND_ENDPOINTS = [
+  { year: "2024", uddi: "uddi:3d46cd64-8ac3-475f-b851-e36f7511165d", ns: "15071589" },
 ];
 
 async function fetchPage(ns, uddi, page, perPage = 500) {
@@ -90,7 +99,6 @@ function parsePortfolio(data, date) {
   };
 
   const totalRow = data.find((r) => r["구분"] === "전체 자산(시장가)");
-  // 현황 컬럼명은 엔드포인트마다 다름 — "현황(말잔_십억원)" 또는 "현황(말잔_십억 원)" 등
   const currentKey = Object.keys(totalRow).find((k) => k.startsWith("현황"));
   const total = totalRow[currentKey];
 
@@ -101,13 +109,11 @@ function parsePortfolio(data, date) {
     assets[name] = row[currentKey];
   }
 
-  // 연도별 추이 추출
   const yearKeys = Object.keys(totalRow)
     .filter((k) => /^\d{4}년/.test(k))
     .sort();
 
   const history = yearKeys.map((key) => {
-    // "2020년(십억 원)" → "2020-12", "2025년 5월(십억 원)" → "2025-05"
     const match = key.match(/^(\d{4})년\s*(\d{1,2})?월?/);
     const year = match[1];
     const month = match[2] ? match[2].padStart(2, "0") : "12";
@@ -145,29 +151,83 @@ function parseStockHoldings(data, top = 20) {
     }));
 }
 
+// --- 해외채권 파싱 ---
+function parseForeignBonds(data, top = 20) {
+  return data
+    .map((row) => ({
+      name: row["종목명"] || "",
+      type: row["종류"] || "",
+      valueBillion: parseFloat(row["금액(억 원)"] || "0") / 10,
+      weight: parseFloat(row["비중(퍼센트)"] || "0"),
+    }))
+    .filter((h) => h.valueBillion > 0)
+    .sort((a, b) => b.valueBillion - a.valueBillion)
+    .slice(0, top)
+    .map((h, i) => ({
+      rank: i + 1,
+      name: h.name,
+      type: h.type,
+      valueBillion: parseFloat(h.valueBillion.toFixed(1)),
+      weight: parseFloat(h.weight.toFixed(2)),
+    }));
+}
+
+// --- 국내채권 파싱 ---
+function parseDomesticBonds(data, top = 20) {
+  return data
+    .map((row) => ({
+      name: row["발행기관명"] || "",
+      valueBillion: parseFloat(row["평가액(억 원)"] || "0") / 10,
+      weight: parseFloat(row["비중(퍼센트)"] || "0"),
+    }))
+    .filter((h) => h.valueBillion > 0)
+    .sort((a, b) => b.valueBillion - a.valueBillion)
+    .slice(0, top)
+    .map((h, i) => ({
+      rank: i + 1,
+      name: h.name,
+      valueBillion: parseFloat(h.valueBillion.toFixed(1)),
+      weight: parseFloat(h.weight.toFixed(2)),
+    }));
+}
+
 async function main() {
   console.log("=== 국민연금 투자정보 업데이트 ===\n");
 
   // 1. 포트폴리오 현황
   const pEndpoint = PORTFOLIO_ENDPOINTS[0];
-  console.log(`[1/3] 기금 포트폴리오 현황 (${pEndpoint.date}) 가져오는 중...`);
+  console.log(`[1/5] 기금 포트폴리오 현황 (${pEndpoint.date}) 가져오는 중...`);
   const portfolioData = await fetchPage(pEndpoint.ns, pEndpoint.uddi, 1, 100);
   const portfolio = parsePortfolio(portfolioData.data, pEndpoint.date);
   console.log(`  총 자산: ${(portfolio.total / 10000).toFixed(1)}조원`);
 
   // 2. 해외주식
   const fEndpoint = FOREIGN_STOCK_ENDPOINTS[0];
-  console.log(`\n[2/3] 해외주식 투자정보 (${fEndpoint.year}년 말) 가져오는 중...`);
+  console.log(`\n[2/5] 해외주식 투자정보 (${fEndpoint.year}년 말) 가져오는 중...`);
   const foreignAll = await fetchAllPages(fEndpoint.ns, fEndpoint.uddi);
   const foreignTop = parseStockHoldings(foreignAll);
   console.log(`  총 ${foreignAll.length}개 종목, Top 1: ${foreignTop[0]?.name}`);
 
   // 3. 국내주식
   const dEndpoint = DOMESTIC_STOCK_ENDPOINTS[0];
-  console.log(`\n[3/3] 국내주식 투자정보 (${dEndpoint.year}년 말) 가져오는 중...`);
+  console.log(`\n[3/5] 국내주식 투자정보 (${dEndpoint.year}년 말) 가져오는 중...`);
   const domesticAll = await fetchAllPages(dEndpoint.ns, dEndpoint.uddi);
   const domesticTop = parseStockHoldings(domesticAll);
   console.log(`  총 ${domesticAll.length}개 종목, Top 1: ${domesticTop[0]?.name}`);
+
+  // 4. 해외채권
+  const fbEndpoint = FOREIGN_BOND_ENDPOINTS[0];
+  console.log(`\n[4/5] 해외채권 투자정보 (${fbEndpoint.year}년 말) 가져오는 중...`);
+  const foreignBondAll = await fetchAllPages(fbEndpoint.ns, fbEndpoint.uddi);
+  const foreignBondTop = parseForeignBonds(foreignBondAll);
+  console.log(`  총 ${foreignBondAll.length}개 종목, Top 1: ${foreignBondTop[0]?.name}`);
+
+  // 5. 국내채권
+  const dbEndpoint = DOMESTIC_BOND_ENDPOINTS[0];
+  console.log(`\n[5/5] 국내채권 투자정보 (${dbEndpoint.year}년 말) 가져오는 중...`);
+  const domesticBondAll = await fetchAllPages(dbEndpoint.ns, dbEndpoint.uddi);
+  const domesticBondTop = parseDomesticBonds(domesticBondAll);
+  console.log(`  총 ${domesticBondAll.length}개 발행기관, Top 1: ${domesticBondTop[0]?.name}`);
 
   // 자산배분 비중 계산
   const allocationPct = {};
@@ -195,6 +255,16 @@ async function main() {
       totalCount: domesticAll.length,
       top20: domesticTop,
     },
+    foreignBonds: {
+      referenceDate: `${fbEndpoint.year}-12-31`,
+      totalCount: foreignBondAll.length,
+      top20: foreignBondTop,
+    },
+    domesticBonds: {
+      referenceDate: `${dbEndpoint.year}-12-31`,
+      totalCount: domesticBondAll.length,
+      top20: domesticBondTop,
+    },
   };
 
   writeFileSync(OUTPUT_PATH, JSON.stringify(output, null, 2) + "\n");
@@ -203,7 +273,8 @@ async function main() {
   console.log(`   포트폴리오: ${portfolio.date} 기준, ${(portfolio.total / 10000).toFixed(1)}조원`);
   console.log(`   해외주식: ${foreignAll.length}개 → Top 20`);
   console.log(`   국내주식: ${domesticAll.length}개 → Top 20`);
-  console.log(`   자산배분: 국내주식 ${allocationPct["국내주식"]}% | 해외주식 ${allocationPct["해외주식"]}% | 국내채권 ${allocationPct["국내채권"]}% | 해외채권 ${allocationPct["해외채권"]}% | 대체투자 ${allocationPct["대체투자"]}%`);
+  console.log(`   해외채권: ${foreignBondAll.length}개 → Top 20`);
+  console.log(`   국내채권: ${domesticBondAll.length}개 → Top 20`);
 }
 
 main().catch((err) => {
