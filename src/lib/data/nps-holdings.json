@@ -90,6 +90,7 @@
       {
         "rank": 1,
         "name": "APPLE INC",
+        "sector": "IT",
         "valueBillion": 20633,
         "weight": 4.91,
         "ownershipPct": 0.38
@@ -97,6 +98,7 @@
       {
         "rank": 2,
         "name": "NVIDIA CORP",
+        "sector": "IT",
         "valueBillion": 17947.6,
         "weight": 4.27,
         "ownershipPct": 0.37
@@ -104,6 +106,7 @@
       {
         "rank": 3,
         "name": "MICROSOFT CORP",
+        "sector": "IT",
         "valueBillion": 16500.5,
         "weight": 3.93,
         "ownershipPct": 0.36
@@ -111,6 +114,7 @@
       {
         "rank": 4,
         "name": "AMAZON.COM INC",
+        "sector": "Consumer",
         "valueBillion": 10293.7,
         "weight": 2.45,
         "ownershipPct": 0.3
@@ -118,6 +122,7 @@
       {
         "rank": 5,
         "name": "META PLATFORMS INC CLASS A",
+        "sector": "Communication",
         "valueBillion": 7635.4,
         "weight": 1.82,
         "ownershipPct": 0.41
@@ -125,6 +130,7 @@
       {
         "rank": 6,
         "name": "INVESCO MSCI USA ETF",
+        "sector": "ETF",
         "valueBillion": 6114.5,
         "weight": 1.46,
         "ownershipPct": 54.22
@@ -132,6 +138,7 @@
       {
         "rank": 7,
         "name": "ALPHABET INC CL A",
+        "sector": "Communication",
         "valueBillion": 5881.7,
         "weight": 1.4,
         "ownershipPct": 0.36
@@ -139,6 +146,7 @@
       {
         "rank": 8,
         "name": "ALPHABET INC CL C",
+        "sector": "Communication",
         "valueBillion": 5459.1,
         "weight": 1.3,
         "ownershipPct": 0.36
@@ -146,6 +154,7 @@
       {
         "rank": 9,
         "name": "BROADCOM INC",
+        "sector": "IT",
         "valueBillion": 5350.5,
         "weight": 1.27,
         "ownershipPct": 0.33
@@ -153,6 +162,7 @@
       {
         "rank": 10,
         "name": "TESLA INC",
+        "sector": "Consumer",
         "valueBillion": 5249.9,
         "weight": 1.25,
         "ownershipPct": 0.27
@@ -160,6 +170,7 @@
       {
         "rank": 11,
         "name": "TAIWAN SEMICONDUCTOR SP ADR",
+        "sector": "IT",
         "valueBillion": 4127.2,
         "weight": 0.98,
         "ownershipPct": 0.27
@@ -167,6 +178,7 @@
       {
         "rank": 12,
         "name": "ISHARES CORE S+P 500 ETF",
+        "sector": "ETF",
         "valueBillion": 3564.7,
         "weight": 0.85,
         "ownershipPct": 0.41
@@ -174,6 +186,7 @@
       {
         "rank": 13,
         "name": "JPMORGAN CHASE + CO",
+        "sector": "Finance",
         "valueBillion": 3438.4,
         "weight": 0.82,
         "ownershipPct": 0.35
@@ -181,6 +194,7 @@
       {
         "rank": 14,
         "name": "TAIWAN SEMICONDUCTOR MANUFAC",
+        "sector": "IT",
         "valueBillion": 3269.6,
         "weight": 0.78,
         "ownershipPct": 0.26
@@ -188,6 +202,7 @@
       {
         "rank": 15,
         "name": "UNITEDHEALTH GROUP INC",
+        "sector": "Healthcare",
         "valueBillion": 2796.8,
         "weight": 0.67,
         "ownershipPct": 0.41
@@ -195,6 +210,7 @@
       {
         "rank": 16,
         "name": "VISA INC CLASS A SHARES",
+        "sector": "Finance",
         "valueBillion": 2648.8,
         "weight": 0.63,
         "ownershipPct": 0.33
@@ -202,6 +218,7 @@
       {
         "rank": 17,
         "name": "MASTERCARD INC   A",
+        "sector": "Finance",
         "valueBillion": 2615,
         "weight": 0.62,
         "ownershipPct": 0.37
@@ -209,6 +226,7 @@
       {
         "rank": 18,
         "name": "NETFLIX INC",
+        "sector": "Communication",
         "valueBillion": 2506.5,
         "weight": 0.6,
         "ownershipPct": 0.45
@@ -216,6 +234,7 @@
       {
         "rank": 19,
         "name": "EXXON MOBIL CORP",
+        "sector": "Energy",
         "valueBillion": 2470.4,
         "weight": 0.59,
         "ownershipPct": 0.36
@@ -223,9 +242,52 @@
       {
         "rank": 20,
         "name": "ELI LILLY + CO",
+        "sector": "Healthcare",
         "valueBillion": 2368.8,
         "weight": 0.56,
         "ownershipPct": 0.22
+      }
+    ],
+    "sectorBreakdown": [
+      {
+        "sector": "기타",
+        "valueBillion": 293144,
+        "pct": 69.1
+      },
+      {
+        "sector": "IT",
+        "valueBillion": 67828.4,
+        "pct": 16
+      },
+      {
+        "sector": "Communication",
+        "valueBillion": 21482.7,
+        "pct": 5.1
+      },
+      {
+        "sector": "Consumer",
+        "valueBillion": 15543.6,
+        "pct": 3.7
+      },
+      {
+        "sector": "ETF",
+        "valueBillion": 9679.2,
+        "pct": 2.3
+      },
+      {
+        "sector": "Finance",
+        "valueBillion": 8702.2,
+        "pct": 2.1
+      },
+      {
+        "sector": "Healthcare",
+        "valueBillion": 5165.6,
+        "pct": 1.2
+      },
+      {
+        "sector": "Energy",
+        "valueBillion": 2470.4,
+        "pct": 0.6
       }
     ]
   },
@@ -236,6 +298,7 @@
       {
         "rank": 1,
         "name": "삼성전자",
+        "sector": "IT",
         "valueBillion": 23042.1,
         "weight": 16.7,
         "ownershipPct": 7.26
@@ -243,6 +306,7 @@
       {
         "rank": 2,
         "name": "SK하이닉스",
+        "sector": "IT",
         "valueBillion": 9562.7,
         "weight": 6.93,
         "ownershipPct": 7.55
@@ -250,6 +314,7 @@
       {
         "rank": 3,
         "name": "LG에너지솔루션",
+        "sector": "2차전지",
         "valueBillion": 5170.6,
         "weight": 3.75,
         "ownershipPct": 6.35
@@ -257,6 +322,7 @@
       {
         "rank": 4,
         "name": "삼성바이오로직스",
+        "sector": "바이오",
         "valueBillion": 4672.1,
         "weight": 3.39,
         "ownershipPct": 6.92
@@ -264,6 +330,7 @@
       {
         "rank": 5,
         "name": "현대차",
+        "sector": "자동차",
         "valueBillion": 3352.9,
         "weight": 2.43,
         "ownershipPct": 7.55
@@ -271,6 +338,7 @@
       {
         "rank": 6,
         "name": "기아",
+        "sector": "자동차",
         "valueBillion": 2858.9,
         "weight": 2.07,
         "ownershipPct": 7.14
@@ -278,6 +346,7 @@
       {
         "rank": 7,
         "name": "NAVER",
+        "sector": "IT",
         "valueBillion": 2813.4,
         "weight": 2.04,
         "ownershipPct": 8.94
@@ -285,6 +354,7 @@
       {
         "rank": 8,
         "name": "셀트리온",
+        "sector": "바이오",
         "valueBillion": 2762.4,
         "weight": 2,
         "ownershipPct": 6.79
@@ -292,6 +362,7 @@
       {
         "rank": 9,
         "name": "KB금융",
+        "sector": "금융",
         "valueBillion": 2740.5,
         "weight": 1.99,
         "ownershipPct": 8.4
@@ -299,6 +370,7 @@
       {
         "rank": 10,
         "name": "신한지주",
+        "sector": "금융",
         "valueBillion": 2054.7,
         "weight": 1.49,
         "ownershipPct": 8.56
@@ -306,6 +378,7 @@
       {
         "rank": 11,
         "name": "현대모비스",
+        "sector": "자동차",
         "valueBillion": 1993.7,
         "weight": 1.44,
         "ownershipPct": 9.06
@@ -313,6 +386,7 @@
       {
         "rank": 12,
         "name": "HD현대중공업",
+        "sector": "조선",
         "valueBillion": 1683.7,
         "weight": 1.22,
         "ownershipPct": 6.6
@@ -320,6 +394,7 @@
       {
         "rank": 13,
         "name": "POSCO홀딩스",
+        "sector": "소재",
         "valueBillion": 1562.8,
         "weight": 1.13,
         "ownershipPct": 7.46
@@ -327,6 +402,7 @@
       {
         "rank": 14,
         "name": "하나금융지주",
+        "sector": "금융",
         "valueBillion": 1508.1,
         "weight": 1.09,
         "ownershipPct": 9.25
@@ -334,6 +410,7 @@
       {
         "rank": 15,
         "name": "삼성물산",
+        "sector": "건설",
         "valueBillion": 1485.2,
         "weight": 1.08,
         "ownershipPct": 7.28
@@ -341,6 +418,7 @@
       {
         "rank": 16,
         "name": "LG화학",
+        "sector": "화학",
         "valueBillion": 1454.6,
         "weight": 1.05,
         "ownershipPct": 8.25
@@ -348,6 +426,7 @@
       {
         "rank": 17,
         "name": "삼성생명",
+        "sector": "금융",
         "valueBillion": 1340,
         "weight": 0.97,
         "ownershipPct": 7.07
@@ -355,6 +434,7 @@
       {
         "rank": 18,
         "name": "메리츠금융지주",
+        "sector": "금융",
         "valueBillion": 1318,
         "weight": 0.95,
         "ownershipPct": 6.65
@@ -362,6 +442,7 @@
       {
         "rank": 19,
         "name": "삼성SDI",
+        "sector": "2차전지",
         "valueBillion": 1259.8,
         "weight": 0.91,
         "ownershipPct": 7.41
@@ -369,9 +450,62 @@
       {
         "rank": 20,
         "name": "삼성화재",
+        "sector": "금융",
         "valueBillion": 1179.4,
         "weight": 0.85,
         "ownershipPct": 6.94
+      }
+    ],
+    "sectorBreakdown": [
+      {
+        "sector": "기타",
+        "valueBillion": 64193.8,
+        "pct": 46.5
+      },
+      {
+        "sector": "IT",
+        "valueBillion": 35418.2,
+        "pct": 25.7
+      },
+      {
+        "sector": "금융",
+        "valueBillion": 10140.7,
+        "pct": 7.3
+      },
+      {
+        "sector": "자동차",
+        "valueBillion": 8205.5,
+        "pct": 5.9
+      },
+      {
+        "sector": "바이오",
+        "valueBillion": 7434.5,
+        "pct": 5.4
+      },
+      {
+        "sector": "2차전지",
+        "valueBillion": 6430.4,
+        "pct": 4.7
+      },
+      {
+        "sector": "조선",
+        "valueBillion": 1683.7,
+        "pct": 1.2
+      },
+      {
+        "sector": "소재",
+        "valueBillion": 1562.8,
+        "pct": 1.1
+      },
+      {
+        "sector": "건설",
+        "valueBillion": 1485.2,
+        "pct": 1.1
+      },
+      {
+        "sector": "화학",
+        "valueBillion": 1454.6,
+        "pct": 1.1
       }
     ]
   },
@@ -383,6 +517,9 @@
         "rank": 1,
         "name": "U S TREASURY NOTE3.875% 08/15/2034 DD 08/15/24",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "중기",
+        "rate": "3.875%",
         "valueBillion": 1602.9,
         "weight": 1.81
       },
@@ -390,6 +527,9 @@
         "rank": 2,
         "name": "U S TREASURY BOND4.250% 08/15/2054 DD 08/15/24",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "장기",
+        "rate": "4.250%",
         "valueBillion": 666.7,
         "weight": 0.75
       },
@@ -397,6 +537,9 @@
         "rank": 3,
         "name": "U S TREASURY BOND4.375% 08/15/2043 DD 08/15/23",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "장기",
+        "rate": "4.375%",
         "valueBillion": 561,
         "weight": 0.63
       },
@@ -404,6 +547,9 @@
         "rank": 4,
         "name": "JAPAN GOVERNMENT TWO YEAR BOND0.400% 08/01/2026",
         "type": "TREASURIES",
+        "country": "일본",
+        "maturityClass": "단기",
+        "rate": "0.400%",
         "valueBillion": 530.8,
         "weight": 0.6
       },
@@ -411,6 +557,9 @@
         "rank": 5,
         "name": "U S TREASURY NOTE4.500% 11/15/2033 DD 11/15/23",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "중기",
+        "rate": "4.500%",
         "valueBillion": 469.8,
         "weight": 0.53
       },
@@ -418,6 +567,9 @@
         "rank": 6,
         "name": "UNITED KINGDOM GILT REGS4.250% 07/31/2034",
         "type": "TREASURIES",
+        "country": "영국",
+        "maturityClass": "중기",
+        "rate": "4.250%",
         "valueBillion": 464,
         "weight": 0.52
       },
@@ -425,6 +577,9 @@
         "rank": 7,
         "name": "U S TREASURY NOTE3.500% 09/30/2029 DD 09/30/24",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "중기",
+        "rate": "3.500%",
         "valueBillion": 442.6,
         "weight": 0.5
       },
@@ -432,6 +587,9 @@
         "rank": 8,
         "name": "FRENCH REPUBLIC GOVERNMEN 144A2.750% 02/25/2029",
         "type": "TREASURIES",
+        "country": "프랑스",
+        "maturityClass": "중기",
+        "rate": "2.750%",
         "valueBillion": 433.9,
         "weight": 0.49
       },
@@ -439,6 +597,9 @@
         "rank": 9,
         "name": "CHINA GOVERNMENT BOND2.620% 06/25/2030",
         "type": "TREASURIES",
+        "country": "중국",
+        "maturityClass": "중기",
+        "rate": "2.620%",
         "valueBillion": 409.7,
         "weight": 0.46
       },
@@ -446,6 +607,9 @@
         "rank": 10,
         "name": "U S TREASURY NOTE4.625% 09/30/2028 DD 09/30/23",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "중기",
+        "rate": "4.625%",
         "valueBillion": 401.1,
         "weight": 0.45
       },
@@ -453,6 +617,9 @@
         "rank": 11,
         "name": "U S TREASURY NOTE4.250% 03/15/2027 DD 03/15/24",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "단기",
+        "rate": "4.250%",
         "valueBillion": 384,
         "weight": 0.43
       },
@@ -460,6 +627,9 @@
         "rank": 12,
         "name": "U S TREASURY NOTE4.375% 08/31/2028 DD 08/31/23",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "중기",
+        "rate": "4.375%",
         "valueBillion": 380.7,
         "weight": 0.43
       },
@@ -467,6 +637,9 @@
         "rank": 13,
         "name": "JAPAN GOVERNMENT TEN YEAR BOND1.100% 06/20/2034",
         "type": "TREASURIES",
+        "country": "일본",
+        "maturityClass": "중기",
+        "rate": "1.100%",
         "valueBillion": 373.7,
         "weight": 0.42
       },
@@ -474,6 +647,9 @@
         "rank": 14,
         "name": "FRENCH REPUBLIC GOVERNMEN 144A2.500% 09/24/2027",
         "type": "TREASURIES",
+        "country": "프랑스",
+        "maturityClass": "단기",
+        "rate": "2.500%",
         "valueBillion": 364.8,
         "weight": 0.41
       },
@@ -481,6 +657,9 @@
         "rank": 15,
         "name": "CHINA GOVERNMENT BOND2.680% 05/21/2030",
         "type": "TREASURIES",
+        "country": "중국",
+        "maturityClass": "중기",
+        "rate": "2.680%",
         "valueBillion": 334.6,
         "weight": 0.38
       },
@@ -488,6 +667,9 @@
         "rank": 16,
         "name": "JAPAN GOVERNMENT TWO YEAR BOND0.400% 07/01/2026",
         "type": "TREASURIES",
+        "country": "일본",
+        "maturityClass": "단기",
+        "rate": "0.400%",
         "valueBillion": 327.3,
         "weight": 0.37
       },
@@ -495,6 +677,9 @@
         "rank": 17,
         "name": "SPAIN GOVERNMENT BOND 144A3.450% 10/31/2034",
         "type": "TREASURIES",
+        "country": "스페인",
+        "maturityClass": "중기",
+        "rate": "3.450%",
         "valueBillion": 323.7,
         "weight": 0.37
       },
@@ -502,6 +687,9 @@
         "rank": 18,
         "name": "U S TREASURY NOTE3.875% 10/15/2027 DD 10/15/24",
         "type": "TREASURIES",
+        "country": "미국",
+        "maturityClass": "단기",
+        "rate": "3.875%",
         "valueBillion": 322.7,
         "weight": 0.36
       },
@@ -509,6 +697,9 @@
         "rank": 19,
         "name": "ITALY BUONI POLIENNALI DE 144A4.500% 10/01/2053",
         "type": "TREASURIES",
+        "country": "이탈리아",
+        "maturityClass": "장기",
+        "rate": "4.500%",
         "valueBillion": 318.7,
         "weight": 0.36
       },
@@ -516,6 +707,9 @@
         "rank": 20,
         "name": "ITALY BUONI POLIENNALI DE REGS3.850% 02/01/2035",
         "type": "TREASURIES",
+        "country": "이탈리아",
+        "maturityClass": "장기",
+        "rate": "3.850%",
         "valueBillion": 315.3,
         "weight": 0.36
       }

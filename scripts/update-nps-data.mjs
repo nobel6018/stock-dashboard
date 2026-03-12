@@ -130,9 +130,72 @@ function parsePortfolio(data, date) {
   return { date, total, assets, history };
 }
 
+// --- 섹터 매핑 ---
+const FOREIGN_STOCK_SECTOR = {
+  "APPLE INC": "IT",
+  "NVIDIA CORP": "IT",
+  "MICROSOFT CORP": "IT",
+  "AMAZON.COM INC": "Consumer",
+  "META PLATFORMS INC CLASS A": "Communication",
+  "INVESCO MSCI USA ETF": "ETF",
+  "ALPHABET INC CL A": "Communication",
+  "ALPHABET INC CL C": "Communication",
+  "BROADCOM INC": "IT",
+  "TESLA INC": "Consumer",
+  "TAIWAN SEMICONDUCTOR SP ADR": "IT",
+  "TAIWAN SEMICONDUCTOR MANUFAC": "IT",
+  "ISHARES CORE S+P 500 ETF": "ETF",
+  "JPMORGAN CHASE + CO": "Finance",
+  "UNITEDHEALTH GROUP INC": "Healthcare",
+  "VISA INC CLASS A SHARES": "Finance",
+  "MASTERCARD INC   A": "Finance",
+  "NETFLIX INC": "Communication",
+  "EXXON MOBIL CORP": "Energy",
+  "ELI LILLY + CO": "Healthcare",
+};
+
+const DOMESTIC_STOCK_SECTOR = {
+  삼성전자: "IT",
+  SK하이닉스: "IT",
+  LG에너지솔루션: "2차전지",
+  삼성바이오로직스: "바이오",
+  현대차: "자동차",
+  기아: "자동차",
+  NAVER: "IT",
+  셀트리온: "바이오",
+  KB금융: "금융",
+  신한지주: "금융",
+  현대모비스: "자동차",
+  HD현대중공업: "조선",
+  POSCO홀딩스: "소재",
+  하나금융지주: "금융",
+  삼성물산: "건설",
+  LG화학: "화학",
+  삼성생명: "금융",
+  메리츠금융지주: "금융",
+  삼성SDI: "2차전지",
+  삼성화재: "금융",
+};
+
+function calcSectorBreakdown(holdings, sectorMap) {
+  const sectorTotals = {};
+  for (const h of holdings) {
+    const sector = sectorMap[h.name] || "기타";
+    sectorTotals[sector] = (sectorTotals[sector] || 0) + h.valueBillion;
+  }
+  const total = Object.values(sectorTotals).reduce((a, b) => a + b, 0);
+  return Object.entries(sectorTotals)
+    .map(([sector, valueBillion]) => ({
+      sector,
+      valueBillion: parseFloat(valueBillion.toFixed(1)),
+      pct: parseFloat(((valueBillion / total) * 100).toFixed(1)),
+    }))
+    .sort((a, b) => b.valueBillion - a.valueBillion);
+}
+
 // --- 주식 종목 파싱 ---
-function parseStockHoldings(data, top = 20) {
-  return data
+function parseStockHoldings(data, sectorMap, top = 20) {
+  const all = data
     .map((row) => ({
       name: row["종목명"] || "",
       valueBillion: parseFloat(row["평가액(억 원)"] || "0") / 10,
@@ -140,15 +203,78 @@ function parseStockHoldings(data, top = 20) {
       ownershipPct: parseFloat(row["지분율(퍼센트)"] || "0"),
     }))
     .filter((h) => h.valueBillion > 0)
-    .sort((a, b) => b.valueBillion - a.valueBillion)
-    .slice(0, top)
-    .map((h, i) => ({
-      rank: i + 1,
-      name: h.name,
-      valueBillion: parseFloat(h.valueBillion.toFixed(1)),
-      weight: parseFloat(h.weight.toFixed(2)),
-      ownershipPct: parseFloat(h.ownershipPct.toFixed(2)),
-    }));
+    .sort((a, b) => b.valueBillion - a.valueBillion);
+
+  const sectorBreakdown = calcSectorBreakdown(all, sectorMap);
+
+  const top20 = all.slice(0, top).map((h, i) => ({
+    rank: i + 1,
+    name: h.name,
+    sector: sectorMap[h.name] || "기타",
+    valueBillion: parseFloat(h.valueBillion.toFixed(1)),
+    weight: parseFloat(h.weight.toFixed(2)),
+    ownershipPct: parseFloat(h.ownershipPct.toFixed(2)),
+  }));
+
+  return { top20, sectorBreakdown };
+}
+
+// --- 해외채권 이름 파싱 ---
+const BOND_COUNTRY_PATTERNS = [
+  { pattern: /^U\s*S\s+TREASURY/i, country: "미국" },
+  { pattern: /^JAPAN\s+GOVERNMENT/i, country: "일본" },
+  { pattern: /^CHINA\s+GOVERNMENT/i, country: "중국" },
+  { pattern: /^UNITED\s+KINGDOM\s+GILT/i, country: "영국" },
+  { pattern: /^FRENCH\s+REPUBLIC/i, country: "프랑스" },
+  { pattern: /^SPAIN\s+GOVERNMENT/i, country: "스페인" },
+  { pattern: /^ITALY\s+BUONI/i, country: "이탈리아" },
+  { pattern: /^GERMANY/i, country: "독일" },
+  { pattern: /^BUNDESREPUBLIK/i, country: "독일" },
+  { pattern: /^CANADA/i, country: "캐나다" },
+  { pattern: /^AUSTRALIA/i, country: "호주" },
+  { pattern: /^NETHERLANDS/i, country: "네덜란드" },
+  { pattern: /^BELGIUM/i, country: "벨기에" },
+  { pattern: /^AUSTRIA/i, country: "오스트리아" },
+  { pattern: /^SWEDEN/i, country: "스웨덴" },
+  { pattern: /^DENMARK/i, country: "덴마크" },
+  { pattern: /^NORWAY/i, country: "노르웨이" },
+  { pattern: /^SINGAPORE/i, country: "싱가포르" },
+  { pattern: /^KOREA/i, country: "한국" },
+];
+
+function parseForeignBondEnriched(name) {
+  let country = "기타";
+  for (const { pattern, country: c } of BOND_COUNTRY_PATTERNS) {
+    if (pattern.test(name)) {
+      country = c;
+      break;
+    }
+  }
+
+  // Extract rate: number like 3.875% or 0.400%
+  const rateMatch = name.match(/(\d+\.\d+)%/);
+  const rate = rateMatch ? `${rateMatch[1]}%` : null;
+
+  // Extract maturity date: MM/DD/YYYY
+  const dateMatch = name.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+  let maturityClass = null;
+  if (dateMatch) {
+    const maturityYear = parseInt(dateMatch[3], 10);
+    const maturityMonth = parseInt(dateMatch[1], 10);
+    const refYear = 2024;
+    const refMonth = 12;
+    const yearsToMaturity =
+      maturityYear - refYear + (maturityMonth - refMonth) / 12;
+    if (yearsToMaturity < 3) {
+      maturityClass = "단기";
+    } else if (yearsToMaturity <= 10) {
+      maturityClass = "중기";
+    } else {
+      maturityClass = "장기";
+    }
+  }
+
+  return { country, rate, maturityClass };
 }
 
 // --- 해외채권 파싱 ---
@@ -163,13 +289,19 @@ function parseForeignBonds(data, top = 20) {
     .filter((h) => h.valueBillion > 0)
     .sort((a, b) => b.valueBillion - a.valueBillion)
     .slice(0, top)
-    .map((h, i) => ({
-      rank: i + 1,
-      name: h.name,
-      type: h.type,
-      valueBillion: parseFloat(h.valueBillion.toFixed(1)),
-      weight: parseFloat(h.weight.toFixed(2)),
-    }));
+    .map((h, i) => {
+      const enriched = parseForeignBondEnriched(h.name);
+      return {
+        rank: i + 1,
+        name: h.name,
+        type: h.type,
+        country: enriched.country,
+        maturityClass: enriched.maturityClass,
+        rate: enriched.rate,
+        valueBillion: parseFloat(h.valueBillion.toFixed(1)),
+        weight: parseFloat(h.weight.toFixed(2)),
+      };
+    });
 }
 
 // --- 국내채권 파싱 ---
@@ -205,14 +337,14 @@ async function main() {
   const fEndpoint = FOREIGN_STOCK_ENDPOINTS[0];
   console.log(`\n[2/5] 해외주식 투자정보 (${fEndpoint.year}년 말) 가져오는 중...`);
   const foreignAll = await fetchAllPages(fEndpoint.ns, fEndpoint.uddi);
-  const foreignTop = parseStockHoldings(foreignAll);
+  const { top20: foreignTop, sectorBreakdown: foreignSectorBreakdown } = parseStockHoldings(foreignAll, FOREIGN_STOCK_SECTOR);
   console.log(`  총 ${foreignAll.length}개 종목, Top 1: ${foreignTop[0]?.name}`);
 
   // 3. 국내주식
   const dEndpoint = DOMESTIC_STOCK_ENDPOINTS[0];
   console.log(`\n[3/5] 국내주식 투자정보 (${dEndpoint.year}년 말) 가져오는 중...`);
   const domesticAll = await fetchAllPages(dEndpoint.ns, dEndpoint.uddi);
-  const domesticTop = parseStockHoldings(domesticAll);
+  const { top20: domesticTop, sectorBreakdown: domesticSectorBreakdown } = parseStockHoldings(domesticAll, DOMESTIC_STOCK_SECTOR);
   console.log(`  총 ${domesticAll.length}개 종목, Top 1: ${domesticTop[0]?.name}`);
 
   // 4. 해외채권
@@ -249,11 +381,13 @@ async function main() {
       referenceDate: `${fEndpoint.year}-12-31`,
       totalCount: foreignAll.length,
       top20: foreignTop,
+      sectorBreakdown: foreignSectorBreakdown,
     },
     domesticStocks: {
       referenceDate: `${dEndpoint.year}-12-31`,
       totalCount: domesticAll.length,
       top20: domesticTop,
+      sectorBreakdown: domesticSectorBreakdown,
     },
     foreignBonds: {
       referenceDate: `${fbEndpoint.year}-12-31`,
