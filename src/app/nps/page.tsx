@@ -20,7 +20,7 @@ function formatValueBillion(v: number): string {
   return `${v.toLocaleString()}억`;
 }
 
-type Holding = {
+type StockHolding = {
   rank: number;
   name: string;
   valueBillion: number;
@@ -28,14 +28,22 @@ type Holding = {
   ownershipPct: number;
 };
 
-function HoldingsTable({
+type BondHolding = {
+  rank: number;
+  name: string;
+  valueBillion: number;
+  weight: number;
+  type?: string;
+};
+
+function StockTable({
   title,
   holdings,
   referenceDate,
   totalCount,
 }: {
   title: string;
-  holdings: Holding[];
+  holdings: StockHolding[];
   referenceDate: string;
   totalCount: number;
 }) {
@@ -86,8 +94,82 @@ function HoldingsTable({
   );
 }
 
+function BondTable({
+  title,
+  holdings,
+  referenceDate,
+  totalCount,
+  nameLabel,
+  countLabel,
+  showType,
+}: {
+  title: string;
+  holdings: BondHolding[];
+  referenceDate: string;
+  totalCount: number;
+  nameLabel: string;
+  countLabel: string;
+  showType?: boolean;
+}) {
+  return (
+    <section className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5">
+      <div className="mb-4 flex items-baseline justify-between">
+        <h2 className="text-lg font-semibold">{title}</h2>
+        <span className="text-xs text-zinc-500">
+          {referenceDate} · {totalCount.toLocaleString()}개 {countLabel}
+        </span>
+      </div>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr className="border-b border-white/[0.06] text-left text-xs text-zinc-500">
+              <th className="py-2 pr-3">#</th>
+              <th className="py-2 pr-3">{nameLabel}</th>
+              {showType && <th className="py-2 pr-3">종류</th>}
+              <th className="py-2 pr-3 text-right">평가액</th>
+              <th className="py-2 text-right">비중</th>
+            </tr>
+          </thead>
+          <tbody>
+            {holdings.map((h) => (
+              <tr
+                key={h.rank}
+                className="border-b border-white/[0.03] hover:bg-white/[0.02]"
+              >
+                <td className="py-2.5 pr-3 text-zinc-600">{h.rank}</td>
+                <td className="max-w-[280px] truncate py-2.5 pr-3 font-medium text-white">
+                  {h.name}
+                </td>
+                {showType && (
+                  <td className="py-2.5 pr-3">
+                    <span className="rounded bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-zinc-400">
+                      {h.type}
+                    </span>
+                  </td>
+                )}
+                <td className="py-2.5 pr-3 text-right font-mono text-zinc-300">
+                  {formatValueBillion(h.valueBillion)}
+                </td>
+                <td className="py-2.5 text-right font-mono text-zinc-300">
+                  {h.weight}%
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
 export default function NpsPage() {
-  const { portfolio, foreignStocks, domesticStocks } = npsData;
+  const {
+    portfolio,
+    foreignStocks,
+    domesticStocks,
+    foreignBonds,
+    domesticBonds,
+  } = npsData;
   const allocationEntries = Object.entries(portfolio.allocation).filter(
     ([key]) => key !== "단기자금",
   ) as [string, number][];
@@ -99,7 +181,7 @@ export default function NpsPage() {
         <h1 className="text-xl font-semibold">국민연금 포트폴리오</h1>
         <p className="mt-1 text-sm text-zinc-500">
           자산현황: {portfolio.referenceDate} 기준 · 총{" "}
-          {formatTrilion(portfolio.totalBillion)} · 주식보유:{" "}
+          {formatTrilion(portfolio.totalBillion)} · 보유현황:{" "}
           {foreignStocks.referenceDate} 기준 · 출처: {npsData.source}
         </p>
       </div>
@@ -154,7 +236,7 @@ export default function NpsPage() {
         </section>
 
         <section className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 lg:col-span-2">
-          <h2 className="mb-4 text-lg font-semibold">연도별 자산 추이</h2>
+          <h2 className="mb-4 text-lg font-semibold">자산 추이</h2>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead>
@@ -208,18 +290,39 @@ export default function NpsPage() {
       </div>
 
       {/* 주식 보유 현황 */}
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-        <HoldingsTable
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <StockTable
           title="해외주식 Top 20"
           holdings={foreignStocks.top20}
           referenceDate={foreignStocks.referenceDate}
           totalCount={foreignStocks.totalCount}
         />
-        <HoldingsTable
+        <StockTable
           title="국내주식 Top 20"
           holdings={domesticStocks.top20}
           referenceDate={domesticStocks.referenceDate}
           totalCount={domesticStocks.totalCount}
+        />
+      </div>
+
+      {/* 채권 보유 현황 */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <BondTable
+          title="해외채권 Top 20"
+          holdings={foreignBonds.top20}
+          referenceDate={foreignBonds.referenceDate}
+          totalCount={foreignBonds.totalCount}
+          nameLabel="종목"
+          countLabel="종목"
+          showType
+        />
+        <BondTable
+          title="국내채권 Top 20"
+          holdings={domesticBonds.top20}
+          referenceDate={domesticBonds.referenceDate}
+          totalCount={domesticBonds.totalCount}
+          nameLabel="발행기관"
+          countLabel="발행기관"
         />
       </div>
     </div>
