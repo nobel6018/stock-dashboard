@@ -105,4 +105,18 @@ export const INVESTORS = [
     entity: "ARK Investment Management",
     cik: "0001697748",
   },
+  {
+    id: "li-lu",
+    name: "Li Lu",
+    nameKo: "리루",
+    entity: "Himalaya Capital Management",
+    cik: "0001709323",
+  },
+  {
+    id: "chase-coleman",
+    name: "Chase Coleman",
+    nameKo: "체이스 콜먼",
+    entity: "Tiger Global Management",
+    cik: "0001167483",
+  },
 ] as const;
