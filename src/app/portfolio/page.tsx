@@ -135,7 +135,7 @@ function computeCommonStocks(portfolios: InvestorPortfolio[]): CommonStock[] {
   }
 
   return Array.from(stockMap.values())
-    .filter((s) => s.holders.length >= 2)
+    .filter((s) => s.holders.length >= 2 && s.name.trim() !== "")
     .map((s) => ({
       name: s.name,
       holders: s.holders,

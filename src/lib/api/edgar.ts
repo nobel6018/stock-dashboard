@@ -149,9 +149,18 @@ function parseInfoTable(xml: string): Holding[] {
 }
 
 function extractTag(xml: string, tagName: string): string | null {
-  const regex = new RegExp(`<(?:[a-z]+:)?${tagName}[^>]*>([^<]*)<`, "i");
+  const regex = new RegExp(`<(?:[a-z0-9]+:)?${tagName}[^>]*>([^<]*)<`, "i");
   const match = regex.exec(xml);
-  return match ? match[1].trim() : null;
+  return match ? decodeXmlEntities(match[1].trim()) : null;
+}
+
+function decodeXmlEntities(s: string): string {
+  return s
+    .replace(/&amp;/g, "&")
+    .replace(/&lt;/g, "<")
+    .replace(/&gt;/g, ">")
+    .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'");
 }
 
 export async function getInvestorPortfolio(

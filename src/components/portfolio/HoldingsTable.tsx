@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { Holding } from "@/types/portfolio";
 import { formatLargeNumber } from "@/lib/utils/formatters";
 
@@ -17,7 +19,9 @@ const CHANGE_BADGE: Record<string, { label: string; className: string }> = {
 };
 
 export function HoldingsTable({ holdings, maxRows }: HoldingsTableProps) {
-  const display = maxRows ? holdings.slice(0, maxRows) : holdings;
+  const [expanded, setExpanded] = useState(false);
+  const canExpand = maxRows && holdings.length > maxRows;
+  const display = canExpand && !expanded ? holdings.slice(0, maxRows) : holdings;
 
   return (
     <div className="overflow-x-auto">
@@ -74,6 +78,18 @@ export function HoldingsTable({ holdings, maxRows }: HoldingsTableProps) {
           })}
         </tbody>
       </table>
+      {canExpand && (
+        <button
+          onClick={() => setExpanded((prev) => !prev)}
+          className="mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-xs text-zinc-500 hover:bg-white/[0.03] hover:text-zinc-300 transition-colors"
+        >
+          {expanded ? (
+            <>접기 <ChevronUp className="h-3.5 w-3.5" /></>
+          ) : (
+            <>전체 {holdings.length}개 보기 <ChevronDown className="h-3.5 w-3.5" /></>
+          )}
+        </button>
+      )}
     </div>
   );
 }
