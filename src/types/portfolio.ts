@@ -89,7 +89,7 @@ export const INVESTORS = [
     name: "Seth Klarman",
     nameKo: "세스 클라만",
     entity: "Baupost Group",
-    cik: "0001054420",
+    cik: "0001061768",
   },
   {
     id: "dalio",
@@ -97,5 +97,12 @@ export const INVESTORS = [
     nameKo: "레이 달리오",
     entity: "Bridgewater Associates",
     cik: "0001350694",
+  },
+  {
+    id: "cathie-wood",
+    name: "Cathie Wood",
+    nameKo: "캐시 우드",
+    entity: "ARK Investment Management",
+    cik: "0001697748",
   },
 ] as const;

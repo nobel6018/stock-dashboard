@@ -91,7 +91,7 @@ export async function fetch13FHoldings(
 
 function parseInfoTable(xml: string): Holding[] {
   const rawEntries: { name: string; cusip: string; rawValue: number; shares: number }[] = [];
-  const entryRegex = /<infoTable[^>]*>([\s\S]*?)<\/infoTable>/gi;
+  const entryRegex = /<(?:[a-z0-9]+:)?infoTable[^>]*>([\s\S]*?)<\/(?:[a-z0-9]+:)?infoTable>/gi;
   let match: RegExpExecArray | null;
 
   while ((match = entryRegex.exec(xml)) !== null) {
