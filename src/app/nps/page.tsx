@@ -1,7 +1,6 @@
 "use client";
 
 import npsData from "@/lib/data/nps-holdings.json";
-import { formatLargeNumber } from "@/lib/utils/formatters";
 
 const ALLOCATION_COLORS: Record<string, string> = {
   국내주식: "#4ade80",
@@ -10,6 +9,11 @@ const ALLOCATION_COLORS: Record<string, string> = {
   해외채권: "#f472b6",
   대체투자: "#a78bfa",
 };
+
+function formatValueBillion(v: number): string {
+  if (v >= 10000) return `${(v / 10000).toFixed(1)}조`;
+  return `${v.toLocaleString()}억`;
+}
 
 export default function NpsPage() {
   const allocation = npsData.assetAllocation;
@@ -22,7 +26,8 @@ export default function NpsPage() {
       <div className="mb-6">
         <h1 className="text-xl font-semibold">국민연금 포트폴리오</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          기준일: {allocation.기준일} · 출처: {npsData.source}
+          기준일: {npsData.referenceDate} · 총 {npsData.totalHoldings}개 해외주식
+          보유 · 출처: {npsData.source}
         </p>
       </div>
 
@@ -66,35 +71,29 @@ export default function NpsPage() {
                 <tr className="border-b border-white/[0.06] text-left text-xs text-zinc-500">
                   <th className="py-2 pr-3">#</th>
                   <th className="py-2 pr-3">종목</th>
-                  <th className="py-2 pr-3">티커</th>
-                  <th className="py-2 pr-3">국가</th>
                   <th className="py-2 pr-3 text-right">평가액</th>
-                  <th className="py-2 text-right">비중</th>
+                  <th className="py-2 pr-3 text-right">비중</th>
+                  <th className="py-2 text-right">지분율</th>
                 </tr>
               </thead>
               <tbody>
                 {npsData.topForeignHoldings.map((h) => (
                   <tr
-                    key={h.ticker}
+                    key={h.rank}
                     className="border-b border-white/[0.03] hover:bg-white/[0.02]"
                   >
                     <td className="py-2.5 pr-3 text-zinc-600">{h.rank}</td>
                     <td className="py-2.5 pr-3 font-medium text-white">
                       {h.name}
                     </td>
-                    <td className="py-2.5 pr-3 font-mono text-zinc-400">
-                      {h.ticker}
-                    </td>
-                    <td className="py-2.5 pr-3">
-                      <span className="rounded bg-white/[0.05] px-1.5 py-0.5 text-[10px] text-zinc-400">
-                        {h.country}
-                      </span>
+                    <td className="py-2.5 pr-3 text-right font-mono text-zinc-300">
+                      {formatValueBillion(h.valueBillion)}
                     </td>
                     <td className="py-2.5 pr-3 text-right font-mono text-zinc-300">
-                      {formatLargeNumber(h.valueBillion * 1_000_000_000)}
-                    </td>
-                    <td className="py-2.5 text-right font-mono text-zinc-300">
                       {h.weight}%
+                    </td>
+                    <td className="py-2.5 text-right font-mono text-zinc-400">
+                      {h.ownershipPct}%
                     </td>
                   </tr>
                 ))}
@@ -104,9 +103,6 @@ export default function NpsPage() {
         </section>
       </div>
 
-      <div className="mt-6 rounded-lg border border-amber-500/20 bg-amber-500/5 p-4 text-sm text-amber-300/80">
-        이 데이터는 샘플입니다. 실제 데이터는 공공데이터포털에서 연간 공시를 다운로드하여 교체해야 합니다.
-      </div>
     </div>
   );
 }
