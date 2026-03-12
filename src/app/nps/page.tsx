@@ -107,7 +107,12 @@ export default function NpsPage() {
       {/* 자산배분 + 연도별 추이 */}
       <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
         <section className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 lg:col-span-1">
-          <h2 className="mb-4 text-lg font-semibold">자산배분 현황</h2>
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 className="text-lg font-semibold">자산배분 현황</h2>
+            <span className="text-xs text-zinc-500">
+              {portfolio.referenceDate} 기준
+            </span>
+          </div>
           <div className="space-y-3">
             {allocationEntries.map(([key, value]) => (
               <div key={key}>
