@@ -1,156 +1,378 @@
 {
   "lastUpdated": "2026-03-12",
-  "source": "공공데이터포털 (data.go.kr/data/3070517)",
-  "referenceDate": "2024-12-31",
-  "assetAllocation": {
-    "기준일": "2024-12-31",
-    "국내주식": 17.2,
-    "해외주식": 30.5,
-    "국내채권": 28.1,
-    "해외채권": 8.7,
-    "대체투자": 15.5
+  "source": "공공데이터포털 (data.go.kr)",
+  "portfolio": {
+    "referenceDate": "2025-05",
+    "totalBillion": 1237303,
+    "allocation": {
+      "국내주식": 13.4,
+      "해외주식": 35.1,
+      "국내채권": 27.2,
+      "해외채권": 7.2,
+      "대체투자": 16.6,
+      "단기자금": 0.2
+    },
+    "assets": {
+      "국내주식": 165343,
+      "해외주식": 434717,
+      "국내채권": 336895,
+      "해외채권": 89026,
+      "대체투자": 205832,
+      "단기자금": 2925
+    },
+    "history": [
+      {
+        "year": "2020",
+        "total": 833728,
+        "국내주식": 176696,
+        "해외주식": 192752,
+        "국내채권": 326099,
+        "해외채권": 44883,
+        "대체투자": 90660,
+        "단기자금": 2049
+      },
+      {
+        "year": "2021",
+        "total": 948719,
+        "국내주식": 165808,
+        "해외주식": 256625,
+        "국내채권": 339991,
+        "해외채권": 63896,
+        "대체투자": 119305,
+        "단기자금": 2481
+      },
+      {
+        "year": "2022",
+        "total": 890466,
+        "국내주식": 125373,
+        "해외주식": 240894,
+        "국내채권": 311186,
+        "해외채권": 63288,
+        "대체투자": 146232,
+        "단기자금": 2017
+      },
+      {
+        "year": "2023",
+        "total": 1035795,
+        "국내주식": 148042,
+        "해외주식": 320361,
+        "국내채권": 326023,
+        "해외채권": 73673,
+        "대체투자": 164204,
+        "단기자금": 2480
+      },
+      {
+        "year": "2024",
+        "total": 1212851,
+        "국내주식": 139722,
+        "해외주식": 430997,
+        "국내채권": 344291,
+        "해외채권": 88293,
+        "대체투자": 206884,
+        "단기자금": 3474
+      },
+      {
+        "year": "2025",
+        "total": 1237303,
+        "국내주식": 165343,
+        "해외주식": 434717,
+        "국내채권": 336895,
+        "해외채권": 89026,
+        "대체투자": 205832,
+        "단기자금": 2925
+      }
+    ]
   },
-  "topForeignHoldings": [
-    {
-      "rank": 1,
-      "name": "APPLE INC",
-      "valueBillion": 20633,
-      "weight": 4.91,
-      "ownershipPct": 0.38
-    },
-    {
-      "rank": 2,
-      "name": "NVIDIA CORP",
-      "valueBillion": 17947.6,
-      "weight": 4.27,
-      "ownershipPct": 0.37
-    },
-    {
-      "rank": 3,
-      "name": "MICROSOFT CORP",
-      "valueBillion": 16500.5,
-      "weight": 3.93,
-      "ownershipPct": 0.36
-    },
-    {
-      "rank": 4,
-      "name": "AMAZON.COM INC",
-      "valueBillion": 10293.7,
-      "weight": 2.45,
-      "ownershipPct": 0.3
-    },
-    {
-      "rank": 5,
-      "name": "META PLATFORMS INC CLASS A",
-      "valueBillion": 7635.4,
-      "weight": 1.82,
-      "ownershipPct": 0.41
-    },
-    {
-      "rank": 6,
-      "name": "INVESCO MSCI USA ETF",
-      "valueBillion": 6114.5,
-      "weight": 1.46,
-      "ownershipPct": 54.22
-    },
-    {
-      "rank": 7,
-      "name": "ALPHABET INC CL A",
-      "valueBillion": 5881.7,
-      "weight": 1.4,
-      "ownershipPct": 0.36
-    },
-    {
-      "rank": 8,
-      "name": "ALPHABET INC CL C",
-      "valueBillion": 5459.1,
-      "weight": 1.3,
-      "ownershipPct": 0.36
-    },
-    {
-      "rank": 9,
-      "name": "BROADCOM INC",
-      "valueBillion": 5350.5,
-      "weight": 1.27,
-      "ownershipPct": 0.33
-    },
-    {
-      "rank": 10,
-      "name": "TESLA INC",
-      "valueBillion": 5249.9,
-      "weight": 1.25,
-      "ownershipPct": 0.27
-    },
-    {
-      "rank": 11,
-      "name": "TAIWAN SEMICONDUCTOR SP ADR",
-      "valueBillion": 4127.2,
-      "weight": 0.98,
-      "ownershipPct": 0.27
-    },
-    {
-      "rank": 12,
-      "name": "ISHARES CORE S+P 500 ETF",
-      "valueBillion": 3564.7,
-      "weight": 0.85,
-      "ownershipPct": 0.41
-    },
-    {
-      "rank": 13,
-      "name": "JPMORGAN CHASE + CO",
-      "valueBillion": 3438.4,
-      "weight": 0.82,
-      "ownershipPct": 0.35
-    },
-    {
-      "rank": 14,
-      "name": "TAIWAN SEMICONDUCTOR MANUFAC",
-      "valueBillion": 3269.6,
-      "weight": 0.78,
-      "ownershipPct": 0.26
-    },
-    {
-      "rank": 15,
-      "name": "UNITEDHEALTH GROUP INC",
-      "valueBillion": 2796.8,
-      "weight": 0.67,
-      "ownershipPct": 0.41
-    },
-    {
-      "rank": 16,
-      "name": "VISA INC CLASS A SHARES",
-      "valueBillion": 2648.8,
-      "weight": 0.63,
-      "ownershipPct": 0.33
-    },
-    {
-      "rank": 17,
-      "name": "MASTERCARD INC   A",
-      "valueBillion": 2615,
-      "weight": 0.62,
-      "ownershipPct": 0.37
-    },
-    {
-      "rank": 18,
-      "name": "NETFLIX INC",
-      "valueBillion": 2506.5,
-      "weight": 0.6,
-      "ownershipPct": 0.45
-    },
-    {
-      "rank": 19,
-      "name": "EXXON MOBIL CORP",
-      "valueBillion": 2470.4,
-      "weight": 0.59,
-      "ownershipPct": 0.36
-    },
-    {
-      "rank": 20,
-      "name": "ELI LILLY + CO",
-      "valueBillion": 2368.8,
-      "weight": 0.56,
-      "ownershipPct": 0.22
-    }
-  ],
-  "totalHoldings": 3259
+  "foreignStocks": {
+    "referenceDate": "2024-12-31",
+    "totalCount": 3259,
+    "top20": [
+      {
+        "rank": 1,
+        "name": "APPLE INC",
+        "valueBillion": 20633,
+        "weight": 4.91,
+        "ownershipPct": 0.38
+      },
+      {
+        "rank": 2,
+        "name": "NVIDIA CORP",
+        "valueBillion": 17947.6,
+        "weight": 4.27,
+        "ownershipPct": 0.37
+      },
+      {
+        "rank": 3,
+        "name": "MICROSOFT CORP",
+        "valueBillion": 16500.5,
+        "weight": 3.93,
+        "ownershipPct": 0.36
+      },
+      {
+        "rank": 4,
+        "name": "AMAZON.COM INC",
+        "valueBillion": 10293.7,
+        "weight": 2.45,
+        "ownershipPct": 0.3
+      },
+      {
+        "rank": 5,
+        "name": "META PLATFORMS INC CLASS A",
+        "valueBillion": 7635.4,
+        "weight": 1.82,
+        "ownershipPct": 0.41
+      },
+      {
+        "rank": 6,
+        "name": "INVESCO MSCI USA ETF",
+        "valueBillion": 6114.5,
+        "weight": 1.46,
+        "ownershipPct": 54.22
+      },
+      {
+        "rank": 7,
+        "name": "ALPHABET INC CL A",
+        "valueBillion": 5881.7,
+        "weight": 1.4,
+        "ownershipPct": 0.36
+      },
+      {
+        "rank": 8,
+        "name": "ALPHABET INC CL C",
+        "valueBillion": 5459.1,
+        "weight": 1.3,
+        "ownershipPct": 0.36
+      },
+      {
+        "rank": 9,
+        "name": "BROADCOM INC",
+        "valueBillion": 5350.5,
+        "weight": 1.27,
+        "ownershipPct": 0.33
+      },
+      {
+        "rank": 10,
+        "name": "TESLA INC",
+        "valueBillion": 5249.9,
+        "weight": 1.25,
+        "ownershipPct": 0.27
+      },
+      {
+        "rank": 11,
+        "name": "TAIWAN SEMICONDUCTOR SP ADR",
+        "valueBillion": 4127.2,
+        "weight": 0.98,
+        "ownershipPct": 0.27
+      },
+      {
+        "rank": 12,
+        "name": "ISHARES CORE S+P 500 ETF",
+        "valueBillion": 3564.7,
+        "weight": 0.85,
+        "ownershipPct": 0.41
+      },
+      {
+        "rank": 13,
+        "name": "JPMORGAN CHASE + CO",
+        "valueBillion": 3438.4,
+        "weight": 0.82,
+        "ownershipPct": 0.35
+      },
+      {
+        "rank": 14,
+        "name": "TAIWAN SEMICONDUCTOR MANUFAC",
+        "valueBillion": 3269.6,
+        "weight": 0.78,
+        "ownershipPct": 0.26
+      },
+      {
+        "rank": 15,
+        "name": "UNITEDHEALTH GROUP INC",
+        "valueBillion": 2796.8,
+        "weight": 0.67,
+        "ownershipPct": 0.41
+      },
+      {
+        "rank": 16,
+        "name": "VISA INC CLASS A SHARES",
+        "valueBillion": 2648.8,
+        "weight": 0.63,
+        "ownershipPct": 0.33
+      },
+      {
+        "rank": 17,
+        "name": "MASTERCARD INC   A",
+        "valueBillion": 2615,
+        "weight": 0.62,
+        "ownershipPct": 0.37
+      },
+      {
+        "rank": 18,
+        "name": "NETFLIX INC",
+        "valueBillion": 2506.5,
+        "weight": 0.6,
+        "ownershipPct": 0.45
+      },
+      {
+        "rank": 19,
+        "name": "EXXON MOBIL CORP",
+        "valueBillion": 2470.4,
+        "weight": 0.59,
+        "ownershipPct": 0.36
+      },
+      {
+        "rank": 20,
+        "name": "ELI LILLY + CO",
+        "valueBillion": 2368.8,
+        "weight": 0.56,
+        "ownershipPct": 0.22
+      }
+    ]
+  },
+  "domesticStocks": {
+    "referenceDate": "2024-12-31",
+    "totalCount": 1200,
+    "top20": [
+      {
+        "rank": 1,
+        "name": "삼성전자",
+        "valueBillion": 23042.1,
+        "weight": 16.7,
+        "ownershipPct": 7.26
+      },
+      {
+        "rank": 2,
+        "name": "SK하이닉스",
+        "valueBillion": 9562.7,
+        "weight": 6.93,
+        "ownershipPct": 7.55
+      },
+      {
+        "rank": 3,
+        "name": "LG에너지솔루션",
+        "valueBillion": 5170.6,
+        "weight": 3.75,
+        "ownershipPct": 6.35
+      },
+      {
+        "rank": 4,
+        "name": "삼성바이오로직스",
+        "valueBillion": 4672.1,
+        "weight": 3.39,
+        "ownershipPct": 6.92
+      },
+      {
+        "rank": 5,
+        "name": "현대차",
+        "valueBillion": 3352.9,
+        "weight": 2.43,
+        "ownershipPct": 7.55
+      },
+      {
+        "rank": 6,
+        "name": "기아",
+        "valueBillion": 2858.9,
+        "weight": 2.07,
+        "ownershipPct": 7.14
+      },
+      {
+        "rank": 7,
+        "name": "NAVER",
+        "valueBillion": 2813.4,
+        "weight": 2.04,
+        "ownershipPct": 8.94
+      },
+      {
+        "rank": 8,
+        "name": "셀트리온",
+        "valueBillion": 2762.4,
+        "weight": 2,
+        "ownershipPct": 6.79
+      },
+      {
+        "rank": 9,
+        "name": "KB금융",
+        "valueBillion": 2740.5,
+        "weight": 1.99,
+        "ownershipPct": 8.4
+      },
+      {
+        "rank": 10,
+        "name": "신한지주",
+        "valueBillion": 2054.7,
+        "weight": 1.49,
+        "ownershipPct": 8.56
+      },
+      {
+        "rank": 11,
+        "name": "현대모비스",
+        "valueBillion": 1993.7,
+        "weight": 1.44,
+        "ownershipPct": 9.06
+      },
+      {
+        "rank": 12,
+        "name": "HD현대중공업",
+        "valueBillion": 1683.7,
+        "weight": 1.22,
+        "ownershipPct": 6.6
+      },
+      {
+        "rank": 13,
+        "name": "POSCO홀딩스",
+        "valueBillion": 1562.8,
+        "weight": 1.13,
+        "ownershipPct": 7.46
+      },
+      {
+        "rank": 14,
+        "name": "하나금융지주",
+        "valueBillion": 1508.1,
+        "weight": 1.09,
+        "ownershipPct": 9.25
+      },
+      {
+        "rank": 15,
+        "name": "삼성물산",
+        "valueBillion": 1485.2,
+        "weight": 1.08,
+        "ownershipPct": 7.28
+      },
+      {
+        "rank": 16,
+        "name": "LG화학",
+        "valueBillion": 1454.6,
+        "weight": 1.05,
+        "ownershipPct": 8.25
+      },
+      {
+        "rank": 17,
+        "name": "삼성생명",
+        "valueBillion": 1340,
+        "weight": 0.97,
+        "ownershipPct": 7.07
+      },
+      {
+        "rank": 18,
+        "name": "메리츠금융지주",
+        "valueBillion": 1318,
+        "weight": 0.95,
+        "ownershipPct": 6.65
+      },
+      {
+        "rank": 19,
+        "name": "삼성SDI",
+        "valueBillion": 1259.8,
+        "weight": 0.91,
+        "ownershipPct": 7.41
+      },
+      {
+        "rank": 20,
+        "name": "삼성화재",
+        "valueBillion": 1179.4,
+        "weight": 0.85,
+        "ownershipPct": 6.94
+      }
+    ]
+  }
 }
