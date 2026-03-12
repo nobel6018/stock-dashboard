@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { MacroChart } from "@/components/charts/MacroChart";
 import { PeriodSelector } from "@/components/charts/PeriodSelector";
+import { InfoTooltip } from "@/components/ui/InfoTooltip";
 import { TimeSeriesPoint } from "@/types/macro";
 
 interface MacroSignalCardProps {
@@ -13,6 +14,7 @@ interface MacroSignalCardProps {
   defaultPeriod?: string;
   warningThreshold?: number;
   dangerThreshold?: number;
+  description?: string;
   showZeroLine?: boolean;
 }
 
@@ -24,6 +26,7 @@ export function MacroSignalCard({
   defaultPeriod = "1Y",
   warningThreshold,
   dangerThreshold,
+  description,
 }: MacroSignalCardProps) {
   const [data, setData] = useState<TimeSeriesPoint[]>([]);
   const [loading, setLoading] = useState(true);
@@ -70,7 +73,10 @@ export function MacroSignalCard({
     <div className="flex flex-col rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
       <div className="mb-2 flex items-start justify-between">
         <div>
-          <h3 className="text-sm font-medium text-zinc-400">{title}</h3>
+          <h3 className="text-sm font-medium text-zinc-400">
+            {title}
+            {description && <InfoTooltip text={description} />}
+          </h3>
           {currentValue !== null ? (
             <div className={`mt-1 text-2xl font-semibold ${valueColor}`}>
               {formatValue(currentValue)}

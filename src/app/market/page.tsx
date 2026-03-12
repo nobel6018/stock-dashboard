@@ -5,7 +5,7 @@ import { MacroSignalCard } from "@/components/market/MacroSignalCard";
 import { SectorBar } from "@/components/market/SectorBar";
 import { FundFlowChart } from "@/components/market/FundFlowChart";
 import { IndicesTable } from "@/components/market/IndicesTable";
-import { SectorHeatmap } from "@/components/market/SectorHeatmap";
+import { StockHeatmap } from "@/components/market/StockHeatmap";
 import { ChartSyncProvider } from "@/components/charts/ChartSyncContext";
 
 export default function MarketPage() {
@@ -38,6 +38,7 @@ export default function MarketPage() {
               color="#f87171"
               warningThreshold={20}
               dangerThreshold={30}
+              description="S&P 500 옵션의 내재변동성 지수. 20 이하: 안정, 20~30: 경계, 30 이상: 공포 구간."
             />
             <MacroSignalCard
               title="장단기 금리차 (10Y-2Y)"
@@ -45,6 +46,7 @@ export default function MarketPage() {
               unit="%"
               color="#818cf8"
               defaultPeriod="3Y"
+              description="10년물-2년물 국채 금리 차이. 양수(정상): 경기 확장 기대. 축소→0 근접: 경기 둔화 신호. 음수(역전): 단기 금리가 장기보다 높은 비정상 상태. 역전이 해소되어 음수→양수로 돌아오는 시점에 실제 침체가 시작되는 경우가 많음."
             />
           </div>
         </ChartSyncProvider>
@@ -87,7 +89,7 @@ export default function MarketPage() {
             <h3 className="mb-3 text-sm font-medium text-zinc-400">
               섹터 히트맵
             </h3>
-            <SectorHeatmap />
+            <StockHeatmap />
           </div>
         </div>
       </section>
