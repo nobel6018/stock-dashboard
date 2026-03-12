@@ -107,8 +107,12 @@ function parsePortfolio(data, date) {
     .sort();
 
   const history = yearKeys.map((key) => {
-    const year = key.match(/^(\d{4})년/)[1];
-    const entry = { year };
+    // "2020년(십억 원)" → "2020-12", "2025년 5월(십억 원)" → "2025-05"
+    const match = key.match(/^(\d{4})년\s*(\d{1,2})?월?/);
+    const year = match[1];
+    const month = match[2] ? match[2].padStart(2, "0") : "12";
+    const label = `${year}-${month}`;
+    const entry = { label };
     entry.total = totalRow[key];
     for (const row of data) {
       const name = ASSET_MAP[row["구분"]];

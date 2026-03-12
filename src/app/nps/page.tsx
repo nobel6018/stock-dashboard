@@ -159,7 +159,7 @@ export default function NpsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-white/[0.06] text-left text-xs text-zinc-500">
-                  <th className="py-2 pr-3">연도</th>
+                  <th className="py-2 pr-3">기준</th>
                   <th className="py-2 pr-3 text-right">총자산</th>
                   {allocationEntries.map(([key]) => (
                     <th key={key} className="py-2 pr-3 text-right">
@@ -181,11 +181,11 @@ export default function NpsPage() {
                 {portfolio.history.map(
                   (row: Record<string, string | number>) => (
                     <tr
-                      key={row.year}
+                      key={row.label}
                       className="border-b border-white/[0.03] hover:bg-white/[0.02]"
                     >
                       <td className="py-2.5 pr-3 font-medium text-white">
-                        {row.year}
+                        {row.label}
                       </td>
                       <td className="py-2.5 pr-3 text-right font-mono text-zinc-300">
                         {formatTrilion(row.total as number)}
