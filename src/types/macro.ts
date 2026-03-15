@@ -93,7 +93,7 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     source: "fred",
     unit: "",
     color: "#f87171",
-    description: "CBOE 변동성 지수",
+    description: "S&P 500 옵션의 내재변동성 지수. 20 이하: 안정, 20~30: 경계, 30 이상: 공포 구간.",
   },
   {
     id: "yield-spread",
