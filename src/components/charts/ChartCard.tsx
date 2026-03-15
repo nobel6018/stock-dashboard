@@ -38,10 +38,10 @@ export function ChartCard({ indicator }: ChartCardProps) {
   }, [fetchData]);
 
   const currentValue = data.length > 0 ? data[data.length - 1].value : null;
-  const previousValue = data.length > 1 ? data[data.length - 2].value : null;
+  const periodStartValue = data.length > 1 ? data[0].value : null;
   const change =
-    currentValue !== null && previousValue !== null
-      ? formatChange(currentValue, previousValue)
+    currentValue !== null && periodStartValue !== null
+      ? formatChange(currentValue, periodStartValue)
       : null;
 
   return (
