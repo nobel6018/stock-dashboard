@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
-import { BarChart3, Briefcase, Building2, TrendingUp } from "lucide-react";
+import { BarChart3 } from "lucide-react";
+import { SideNav, MobileNav } from "@/components/Nav";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -30,13 +31,6 @@ export const metadata: Metadata = {
   },
 };
 
-const NAV_ITEMS = [
-  { href: "/", label: "매크로 지표", icon: BarChart3 },
-  { href: "/market", label: "증시 흐름", icon: TrendingUp },
-  { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
-  { href: "/nps", label: "국민연금", icon: Building2 },
-];
-
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -53,18 +47,7 @@ export default function RootLayout({
                 <span className="text-sm font-semibold">Stock Dashboard</span>
               </Link>
             </div>
-            <nav className="mt-4 space-y-1 px-3">
-              {NAV_ITEMS.map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-zinc-400 transition-colors hover:bg-white/[0.04] hover:text-white"
-                >
-                  <item.icon className="h-4 w-4" />
-                  {item.label}
-                </Link>
-              ))}
-            </nav>
+            <SideNav />
           </aside>
 
           <header className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-white/[0.06] bg-black/60 backdrop-blur-sm md:hidden">
@@ -73,17 +56,7 @@ export default function RootLayout({
                 <BarChart3 className="h-5 w-5 text-emerald-400" />
                 <span className="text-sm font-semibold">Stock Dashboard</span>
               </Link>
-              <nav className="flex gap-4">
-                {NAV_ITEMS.map((item) => (
-                  <Link
-                    key={item.href}
-                    href={item.href}
-                    className="text-xs text-zinc-400 hover:text-white"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
+              <MobileNav />
             </div>
           </header>
 

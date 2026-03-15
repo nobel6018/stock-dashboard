@@ -78,19 +78,17 @@ export default function MarketPage() {
         <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-zinc-500">
           어제 증시 요약
         </h2>
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-            <h3 className="mb-3 text-sm font-medium text-zinc-400">
-              주요 지수
-            </h3>
-            <IndicesTable />
-          </div>
-          <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
-            <h3 className="mb-3 text-sm font-medium text-zinc-400">
-              섹터 히트맵
-            </h3>
-            <StockHeatmap />
-          </div>
+        <div className="mb-4 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 lg:max-w-md">
+          <h3 className="mb-3 text-sm font-medium text-zinc-400">
+            주요 지수
+          </h3>
+          <IndicesTable />
+        </div>
+        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+          <h3 className="mb-3 text-sm font-medium text-zinc-400">
+            섹터 히트맵
+          </h3>
+          <StockHeatmap />
         </div>
       </section>
     </div>

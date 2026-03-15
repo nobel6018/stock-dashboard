@@ -170,8 +170,8 @@ export function StockHeatmap() {
     return Array.from(groups.values()).sort((a, b) => b.totalCap - a.totalCap);
   }, [stocks]);
 
-  const WIDTH = 1200;
-  const HEIGHT = 600;
+  const WIDTH = 1600;
+  const HEIGHT = 800;
 
   const layout = useMemo(() => {
     if (sectorGroups.length === 0) return [];
@@ -234,18 +234,18 @@ export function StockHeatmap() {
         >
           {layout.map(({ stock, rect }) => {
             const isPositive = stock.changePercent >= 0;
-            const intensity = Math.min(Math.abs(stock.changePercent) / 3, 1);
-            const r = isPositive ? Math.round(16 + (5 - 16) * intensity) : Math.round(16 + (185 - 16) * intensity);
-            const g = isPositive ? Math.round(16 + (150 - 16) * intensity) : Math.round(16 + (28 - 16) * intensity);
-            const b = isPositive ? Math.round(16 + (80 - 16) * intensity) : Math.round(16 + (28 - 16) * intensity);
+            const intensity = Math.min(Math.abs(stock.changePercent) / 2.5, 1);
+            const r = isPositive ? Math.round(30 + (0 - 30) * intensity) : Math.round(30 + (220 - 30) * intensity);
+            const g = isPositive ? Math.round(30 + (180 - 30) * intensity) : Math.round(30 + (30 - 30) * intensity);
+            const b = isPositive ? Math.round(30 + (100 - 30) * intensity) : Math.round(30 + (30 - 30) * intensity);
             const fill = `rgb(${r},${g},${b})`;
 
             const minDim = Math.min(rect.w, rect.h);
-            const showTicker = minDim > 30;
-            const showChange = minDim > 40;
-            const showName = rect.w > 70 && rect.h > 55;
-            const fontSize = Math.max(Math.min(minDim / 5, 14), 8);
-            const changeFontSize = Math.max(fontSize - 2, 7);
+            const showTicker = minDim > 20;
+            const showChange = minDim > 30;
+            const showName = rect.w > 60 && rect.h > 45;
+            const fontSize = Math.max(Math.min(minDim / 4.5, 18), 9);
+            const changeFontSize = Math.max(fontSize - 2, 8);
 
             return (
               <g key={stock.symbol}>
