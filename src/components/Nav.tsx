@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BarChart3, Briefcase, Building2, TrendingUp } from "lucide-react";
+import { BarChart3, BookOpen, Briefcase, Building2, TrendingUp } from "lucide-react";
 
 const NAV_ITEMS = [
   { href: "/", label: "매크로 지표", icon: BarChart3 },
   { href: "/market", label: "증시 흐름", icon: TrendingUp },
   { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
   { href: "/nps", label: "국민연금", icon: Building2 },
+  { href: "/summary", label: "박종훈 요약본", icon: BookOpen },
 ];
 
 function isActive(pathname: string, href: string): boolean {

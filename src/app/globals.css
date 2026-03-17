@@ -16,3 +16,61 @@ body {
   background: var(--background);
   color: var(--foreground);
 }
+
+/* 박종훈 요약본 콘텐츠 스타일 */
+.summary-content {
+  font-size: 0.95rem;
+  line-height: 1.85;
+  color: #e4e4e7;
+}
+.summary-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+  display: block;
+}
+.summary-content p {
+  margin-bottom: 0.8rem;
+}
+.summary-content h1,
+.summary-content h2,
+.summary-content h3 {
+  color: #4ade80;
+  font-weight: 600;
+  margin: 1.5rem 0 0.6rem;
+}
+.summary-content h1 { font-size: 1.3rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.4rem; }
+.summary-content h2 { font-size: 1.15rem; }
+.summary-content h3 { font-size: 1.05rem; color: #a1a1aa; }
+.summary-content ul,
+.summary-content ol {
+  margin: 0.5rem 0 1rem 1.5rem;
+}
+.summary-content li {
+  margin-bottom: 0.3rem;
+}
+.summary-content blockquote {
+  border-left: 3px solid #7c3aed;
+  padding: 0.6rem 1rem;
+  margin: 1rem 0;
+  background: rgba(124,58,237,0.08);
+  border-radius: 0 6px 6px 0;
+  color: #a1a1aa;
+}
+.summary-content a {
+  color: #60a5fa;
+  text-decoration: none;
+}
+.summary-content a:hover {
+  text-decoration: underline;
+}
+.summary-content strong {
+  color: #fff;
+}
+.summary-content hr,
+.summary-content .fd-editor-horizontal-rule {
+  border: none;
+  border-top: 1px solid rgba(255,255,255,0.06);
+  margin: 1.5rem 0;
+}
