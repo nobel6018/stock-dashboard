@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import summaryIndex from "@/lib/data/summaries/index.json";
 
 type Summary = {
@@ -16,16 +17,18 @@ const SUMMARIES: Summary[] = (summaryIndex as Summary[]).filter(
   (s) => s.contentLength > 500
 );
 
-export default function SummaryPage() {
-  const [selectedId, setSelectedId] = useState<string | null>(null);
+function SummaryContent() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const selectedId = searchParams.get("id");
+
   const [content, setContent] = useState<string>("");
   const [loading, setLoading] = useState(false);
 
   const selected = SUMMARIES.find((s) => s.id === selectedId);
 
-  async function loadContent(id: string) {
+  const loadContent = useCallback(async (id: string) => {
     setLoading(true);
-    setSelectedId(id);
     try {
       const res = await fetch(`/api/summary/${id}`);
       const html = await res.text();
@@ -34,10 +37,24 @@ export default function SummaryPage() {
       setContent("<p>콘텐츠를 불러올 수 없습니다.</p>");
     }
     setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (selectedId) {
+      loadContent(selectedId);
+    }
+  }, [selectedId, loadContent]);
+
+  function navigateTo(id: string) {
+    router.push(`/summary?id=${id}`);
+  }
+
+  function goBack() {
+    router.push("/summary");
   }
 
   return (
-    <div>
+    <div className="mx-auto max-w-3xl">
       <div className="mb-6">
         <h1 className="text-xl font-semibold">박종훈 경제로드맵 요약본</h1>
         <p className="mt-1 text-sm text-zinc-500">
@@ -70,7 +87,7 @@ export default function SummaryPage() {
               return (
                 <button
                   key={s.id}
-                  onClick={() => loadContent(s.id)}
+                  onClick={() => navigateTo(s.id)}
                   className={`group flex items-center gap-4 rounded-xl border ${partBorder} bg-white/[0.02] p-4 text-left transition-all hover:bg-white/[0.06] hover:border-white/[0.12]`}
                 >
                   <div
@@ -108,10 +125,7 @@ export default function SummaryPage() {
       ) : (
         <div>
           <button
-            onClick={() => {
-              setSelectedId(null);
-              setContent("");
-            }}
+            onClick={goBack}
             className="mb-4 flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-1.5 text-xs text-zinc-400 transition-colors hover:bg-white/[0.06] hover:text-white"
           >
             <svg
@@ -133,7 +147,7 @@ export default function SummaryPage() {
           <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 md:p-6">
             <div className="mb-4 flex items-baseline justify-between">
               <h2 className="text-lg font-semibold">{selected?.title}</h2>
-              <span className="text-xs text-zinc-500">
+              <span className="shrink-0 text-xs text-zinc-500">
                 {selected?.date} · 조회 {selected?.views}
               </span>
             </div>
@@ -150,7 +164,6 @@ export default function SummaryPage() {
             )}
           </div>
 
-          {/* Prev/Next navigation */}
           <div className="mt-4 flex justify-between">
             {(() => {
               const idx = SUMMARIES.findIndex((s) => s.id === selectedId);
@@ -161,7 +174,7 @@ export default function SummaryPage() {
                 <>
                   {prev ? (
                     <button
-                      onClick={() => loadContent(prev.id)}
+                      onClick={() => navigateTo(prev.id)}
                       className="flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-xs text-zinc-400 hover:bg-white/[0.06] hover:text-white"
                     >
                       ← {prev.title.substring(0, 30)}
@@ -171,7 +184,7 @@ export default function SummaryPage() {
                   )}
                   {next ? (
                     <button
-                      onClick={() => loadContent(next.id)}
+                      onClick={() => navigateTo(next.id)}
                       className="flex items-center gap-1.5 rounded-lg border border-white/[0.06] bg-white/[0.02] px-3 py-2 text-xs text-zinc-400 hover:bg-white/[0.06] hover:text-white"
                     >
                       {next.title.substring(0, 30)} →
@@ -186,5 +199,19 @@ export default function SummaryPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function SummaryPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center py-20">
+          <div className="h-6 w-6 animate-spin rounded-full border-2 border-zinc-600 border-t-emerald-400" />
+        </div>
+      }
+    >
+      <SummaryContent />
+    </Suspense>
   );
 }

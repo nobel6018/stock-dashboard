@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
-import { BarChart3 } from "lucide-react";
-import { SideNav, MobileNav } from "@/components/Nav";
+import { Sidebar } from "@/components/Sidebar";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,29 +38,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} min-h-screen bg-background font-sans text-foreground antialiased`}
       >
         <div className="flex min-h-screen">
-          <aside className="fixed inset-y-0 left-0 z-50 hidden w-56 border-r border-white/[0.06] bg-black/40 backdrop-blur-sm md:block">
-            <div className="flex h-14 items-center border-b border-white/[0.06] px-5">
-              <Link href="/" className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-emerald-400" />
-                <span className="text-sm font-semibold">Stock Dashboard</span>
-              </Link>
-            </div>
-            <SideNav />
-          </aside>
-
-          <header className="fixed inset-x-0 top-0 z-40 flex h-14 items-center border-b border-white/[0.06] bg-black/60 backdrop-blur-sm md:hidden">
-            <div className="flex w-full items-center justify-between px-4">
-              <Link href="/" className="flex items-center gap-2">
-                <BarChart3 className="h-5 w-5 text-emerald-400" />
-                <span className="text-sm font-semibold">Stock Dashboard</span>
-              </Link>
-              <MobileNav />
-            </div>
-          </header>
-
-          <main className="flex-1 pt-14 md:ml-56 md:pt-0">
-            <div className="mx-auto max-w-[1600px] p-4 md:p-6">{children}</div>
-          </main>
+          <Sidebar>{children}</Sidebar>
         </div>
       </body>
     </html>
