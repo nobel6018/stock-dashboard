@@ -3,6 +3,7 @@
 const YahooFinance = require("yahoo-finance2").default;
 
 import { IndexData, SectorData, MAJOR_INDICES, SECTOR_ETFS } from "@/types/market";
+import { TimeSeriesPoint } from "@/types/macro";
 
 const yf = new YahooFinance({ suppressNotices: ["yahooSurvey"] });
 
@@ -43,6 +44,23 @@ export async function fetchIndices(): Promise<IndexData[]> {
   }
 
   return results;
+}
+
+export async function fetchYahooMacroSeries(
+  symbol: string,
+  startDate: string,
+): Promise<TimeSeriesPoint[]> {
+  const result: YFChartResult = await yf.chart(symbol, {
+    period1: startDate,
+    interval: "1d",
+  });
+
+  return result.quotes
+    .filter((q: YFChartQuote) => q.close != null)
+    .map((q: YFChartQuote) => ({
+      time: q.date.toISOString().split("T")[0],
+      value: q.close as number,
+    }));
 }
 
 export async function fetchSectors(): Promise<SectorData[]> {

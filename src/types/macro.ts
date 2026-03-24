@@ -8,7 +8,7 @@ export interface MacroIndicator {
   name: string;
   nameKo: string;
   seriesId: string;
-  source: "fred" | "ecos";
+  source: "fred" | "ecos" | "yahoo";
   unit: string;
   color: string;
   description: string;
@@ -19,8 +19,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "us-10y-treasury",
     name: "US 10Y Treasury",
     nameKo: "미국 10년채 금리",
-    seriesId: "DGS10",
-    source: "fred",
+    seriesId: "^TNX",
+    source: "yahoo",
     unit: "%",
     color: "#4ade80",
     description: "미국 10년 만기 국채 수익률",
@@ -49,8 +49,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "usd-krw",
     name: "USD/KRW",
     nameKo: "원/달러 환율",
-    seriesId: "DEXKOUS",
-    source: "fred",
+    seriesId: "KRW=X",
+    source: "yahoo",
     unit: "₩",
     color: "#fbbf24",
     description: "1달러당 원화",
@@ -59,8 +59,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "wti",
     name: "WTI Crude Oil",
     nameKo: "WTI 유가",
-    seriesId: "DCOILWTICO",
-    source: "fred",
+    seriesId: "CL=F",
+    source: "yahoo",
     unit: "$/bbl",
     color: "#fb923c",
     description: "서부 텍사스 중질유",
@@ -69,8 +69,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "brent",
     name: "Brent Crude Oil",
     nameKo: "Brent 유가",
-    seriesId: "DCOILBRENTEU",
-    source: "fred",
+    seriesId: "BZ=F",
+    source: "yahoo",
     unit: "$/bbl",
     color: "#a78bfa",
     description: "브렌트유",
@@ -79,8 +79,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "bitcoin",
     name: "Bitcoin",
     nameKo: "비트코인",
-    seriesId: "CBBTCUSD",
-    source: "fred",
+    seriesId: "BTC-USD",
+    source: "yahoo",
     unit: "$",
     color: "#f7931a",
     description: "비트코인 (Coinbase USD)",
@@ -89,8 +89,8 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     id: "vix",
     name: "VIX",
     nameKo: "VIX 공포지수",
-    seriesId: "VIXCLS",
-    source: "fred",
+    seriesId: "^VIX",
+    source: "yahoo",
     unit: "",
     color: "#f87171",
     description: "S&P 500 옵션의 내재변동성 지수. 20 이하: 안정, 20~30: 경계, 30 이상: 공포 구간.",

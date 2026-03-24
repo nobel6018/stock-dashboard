@@ -101,7 +101,7 @@ function SummaryContent() {
                     </div>
                     <div className="mt-0.5 flex gap-3 text-xs text-zinc-500">
                       <span>{s.date}</span>
-                      <span>조회 {s.views}</span>
+                      <span>조회 {Number(s.views).toLocaleString()}</span>
                     </div>
                   </div>
                   <svg
@@ -148,7 +148,7 @@ function SummaryContent() {
             <div className="mb-4 flex items-baseline justify-between">
               <h2 className="text-lg font-semibold">{selected?.title}</h2>
               <span className="shrink-0 text-xs text-zinc-500">
-                {selected?.date} · 조회 {selected?.views}
+                {selected?.date} · 조회 {selected?.views ? Number(selected.views).toLocaleString() : selected?.views}
               </span>
             </div>
 
