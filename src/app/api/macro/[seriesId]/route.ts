@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { fetchFredSeries, getStartDateForPeriod } from "@/lib/api/fred";
 import { fetchEcosSeries, getEcosDateRange } from "@/lib/api/ecos";
+import { fetchYahooMacroSeries } from "@/lib/api/yahoo";
 import { MACRO_INDICATORS } from "@/types/macro";
 
 export async function GET(
@@ -19,6 +20,12 @@ export async function GET(
     if (indicator.source === "fred") {
       const startDate = getStartDateForPeriod(period);
       const data = await fetchFredSeries(indicator.seriesId, startDate);
+      return NextResponse.json({ data });
+    }
+
+    if (indicator.source === "yahoo") {
+      const startDate = getStartDateForPeriod(period);
+      const data = await fetchYahooMacroSeries(indicator.seriesId, startDate);
       return NextResponse.json({ data });
     }
 
