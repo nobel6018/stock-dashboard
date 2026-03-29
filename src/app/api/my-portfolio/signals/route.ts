@@ -13,6 +13,8 @@ function last(arr: { value: number }[]): number | null {
   return arr.length > 0 ? arr[arr.length - 1].value : null;
 }
 
+export const revalidate = 60; // 1분 캐시
+
 export async function GET() {
   try {
     const [
