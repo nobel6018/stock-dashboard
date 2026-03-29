@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
+  PieChart,
   ShieldAlert,
   TrendingUp,
 } from "lucide-react";
@@ -18,6 +19,7 @@ import {
 const NAV_ITEMS = [
   { href: "/", label: "매크로 지표", icon: BarChart3 },
   { href: "/market", label: "증시 흐름", icon: TrendingUp },
+  { href: "/my-portfolio", label: "내 포트폴리오", icon: PieChart },
   { href: "/crisis", label: "위기 신호", icon: ShieldAlert },
   { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
   { href: "/nps", label: "국민연금", icon: Building2 },
