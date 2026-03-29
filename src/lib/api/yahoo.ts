@@ -63,6 +63,28 @@ export async function fetchYahooMacroSeries(
     }));
 }
 
+export async function fetchQuotes(
+  symbols: string[],
+): Promise<Record<string, { price: number; changePercent: number }>> {
+  const results: Record<string, { price: number; changePercent: number }> = {};
+
+  await Promise.all(
+    symbols.map(async (symbol) => {
+      try {
+        const quote: YFQuote = await yf.quote(symbol);
+        results[symbol] = {
+          price: quote.regularMarketPrice ?? 0,
+          changePercent: quote.regularMarketChangePercent ?? 0,
+        };
+      } catch (e) {
+        console.error(`Failed to fetch quote for ${symbol}:`, e);
+      }
+    }),
+  );
+
+  return results;
+}
+
 export async function fetchSectors(): Promise<SectorData[]> {
   const results: SectorData[] = [];
   const now = new Date();
