@@ -11,6 +11,7 @@ import {
   ChevronLeft,
   ChevronRight,
   FileText,
+  Quote,
   PieChart,
   ShieldAlert,
   TrendingUp,
@@ -24,6 +25,7 @@ const NAV_ITEMS = [
   { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
   { href: "/nps", label: "국민연금", icon: Building2 },
   { href: "/summary", label: "박종훈 요약본", icon: BookOpen },
+  { href: "/buffett", label: "버핏 서한", icon: Quote },
   { href: "/study", label: "사전학습자료", icon: FileText },
 ];
 
