@@ -12,6 +12,12 @@ export interface MacroIndicator {
   unit: string;
   color: string;
   description: string;
+  /**
+   * 원본 시계열 값에 곱할 스케일. 시리즈 원본 단위가 indicator.unit과
+   * 다를 때 사용. 예) WTREGEN은 millions 단위라 B USD로 표시하려면 0.001.
+   * 미지정 시 1.
+   */
+  scale?: number;
 }
 
 export const MACRO_INDICATORS: MacroIndicator[] = [
@@ -104,5 +110,16 @@ export const MACRO_INDICATORS: MacroIndicator[] = [
     unit: "%",
     color: "#818cf8",
     description: "10년물-2년물 국채 금리 차이. 양수(정상): 경기 확장 기대. 축소→0 근접: 경기 둔화 신호. 음수(역전): 단기 금리가 장기보다 높은 비정상 상태. 역전 해소(음수→양수) 시점이 오히려 가장 위험 — 연준이 경기 악화를 감지해 급격히 금리를 내리면 단기 금리가 빠르게 떨어져 스프레드가 양수로 전환되는데, 이는 경기가 이미 꺾이고 있다는 의미. 역사적으로 실제 침체는 역전 중이 아니라 역전이 풀린 직후에 시작되는 경우가 많았음.",
+  },
+  {
+    id: "tga",
+    name: "Treasury General Account",
+    nameKo: "재무부 TGA 잔고",
+    seriesId: "WTREGEN",
+    source: "fred",
+    unit: "B USD",
+    scale: 0.001,
+    color: "#22d3ee",
+    description: "미 재무부가 연준에 갖고 있는 일반 운영계좌(Treasury General Account) 잔고. 시장 유동성의 핵심 지표 — 재무부가 세금 받거나 국채 발행해서 TGA를 채우면 그만큼 시장에서 현금이 빠져나감(유동성 흡수), 반대로 재무부가 지출하면 시장에 현금이 풀림(유동성 공급). 부채한도 협상 시기엔 TGA가 바닥났다가 합의 후 급격히 채워지면서 유동성 충격을 일으킴. 일반적으로 TGA가 빠르게 늘면 위험자산에 역풍, 빠르게 줄면 순풍. FRED WTREGEN 시리즈(주간, 수요일 종가). 단위는 백만 달러를 십억 달러로 환산.",
   },
 ];
