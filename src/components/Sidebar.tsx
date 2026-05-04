@@ -25,8 +25,8 @@ const NAV_ITEMS = [
   { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
   { href: "/nps", label: "국민연금", icon: Building2 },
   { href: "/summary", label: "박종훈 요약본", icon: BookOpen },
-  { href: "/buffett", label: "버핏 서한", icon: Quote },
   { href: "/study", label: "사전학습자료", icon: FileText },
+  { href: "/buffett", label: "버핏 서한", icon: Quote },
 ];
 
 function isActive(pathname: string, href: string): boolean {
@@ -48,6 +48,18 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
     setCollapsed(next);
     localStorage.setItem("sidebar-collapsed", String(next));
   }
+
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === ".") {
+        e.preventDefault();
+        toggle();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [collapsed]);
 
   const sidebarWidth = collapsed ? "w-14" : "w-56";
   const mainMargin = collapsed ? "md:ml-14" : "md:ml-56";
@@ -95,6 +107,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
         {/* Toggle button */}
         <button
           onClick={toggle}
+          title={collapsed ? "펼치기 (⌘.)" : "접기 (⌘.)"}
           className="absolute inset-x-0 bottom-0 flex h-10 items-center justify-center gap-2 border-t border-white/[0.06] text-zinc-500 transition-colors hover:bg-white/[0.06] hover:text-zinc-300"
         >
           {collapsed ? (
@@ -103,6 +116,7 @@ export function Sidebar({ children }: { children: React.ReactNode }) {
             <>
               <ChevronLeft className="h-3.5 w-3.5" />
               <span className="text-xs">접기</span>
+              <kbd className="rounded border border-white/[0.08] bg-white/[0.04] px-1 text-[10px] text-zinc-500">⌘.</kbd>
             </>
           )}
         </button>
