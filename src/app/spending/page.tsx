@@ -3,6 +3,7 @@
 import { Suspense, useEffect, useMemo, useState } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { SpendingBarChart } from "@/components/spending/SpendingBarChart";
+import { PCEChart } from "@/components/spending/PCEChart";
 import { PARTY_COLORS } from "@/lib/data/spending/presidents";
 import type {
   AnnualSpendingPoint,
@@ -192,6 +193,8 @@ function AnnualView({ onSelectYear }: { onSelectYear: (fy: number) => void }) {
                 <th className="px-4 py-2 text-left">FY</th>
                 <th className="px-4 py-2 text-right">정부 지출</th>
                 <th className="px-4 py-2 text-right">YoY</th>
+                <th className="px-4 py-2 text-right">PCE 소비</th>
+                <th className="px-4 py-2 text-right">소비 대비 지출</th>
                 <th className="px-4 py-2 text-right">GDP 대비 부채</th>
                 <th className="px-4 py-2 text-left">집권 대통령</th>
                 <th className="px-4 py-2"></th>
@@ -220,6 +223,14 @@ function AnnualView({ onSelectYear }: { onSelectYear: (fy: number) => void }) {
                     }`}
                   >
                     {formatPct(d.yoyChangePct)}
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums text-zinc-300">
+                    {d.pceT !== null ? formatT(d.pceT) : "—"}
+                  </td>
+                  <td className="px-4 py-2 text-right tabular-nums text-zinc-300">
+                    {d.outlaysToPcePct !== null
+                      ? `${d.outlaysToPcePct.toFixed(1)}%`
+                      : "—"}
                   </td>
                   <td className="px-4 py-2 text-right tabular-nums text-zinc-300">
                     {d.debtToGdpPct !== null
@@ -259,14 +270,79 @@ function AnnualView({ onSelectYear }: { onSelectYear: (fy: number) => void }) {
         </div>
       </section>
 
-      <p className="mt-4 text-[11px] leading-relaxed text-zinc-500">
-        출처: FRED <code className="text-zinc-400">FYONET</code> (연방정부 순지출,
-        회계연도) ·{" "}
-        <code className="text-zinc-400">GFDEGDQ188S</code> (GDP 대비 총 연방
-        부채) · 월별 데이터: U.S. Treasury Fiscal Data API. 회계연도(FY)는 전년
-        10/1부터 당해 9/30까지. 대통령은 회계연도 종료(9/30) 시점 기준.
-      </p>
+      {/* PCE 월별 차트 */}
+      <div className="mt-5">
+        <PCEChart />
+      </div>
+
+      <UpdateInfo />
     </div>
+  );
+}
+
+function UpdateInfo() {
+  return (
+    <details className="mt-5 rounded-xl border border-white/[0.06] bg-white/[0.02] text-xs">
+      <summary className="cursor-pointer px-4 py-3 text-[11px] font-medium uppercase tracking-wider text-zinc-400 hover:text-zinc-200">
+        데이터 출처와 업데이트 일정
+      </summary>
+      <div className="space-y-3 border-t border-white/[0.04] px-4 py-3 leading-relaxed text-zinc-400">
+        <p>
+          모든 데이터는 페이지 접속 시 외부 API에서 라이브 fetch되며 24시간
+          캐시됩니다. 별도로 업데이트 작업할 필요는 없고, 원본 기관이 새 데이터를
+          내놓으면 24시간 안에 자동으로 반영됩니다.
+        </p>
+        <table className="w-full text-[11px]">
+          <thead className="text-zinc-500">
+            <tr className="border-b border-white/[0.04]">
+              <th className="py-2 pr-4 text-left">데이터</th>
+              <th className="py-2 pr-4 text-left">출처</th>
+              <th className="py-2 text-left">발표 시점</th>
+            </tr>
+          </thead>
+          <tbody className="text-zinc-400">
+            <tr className="border-b border-white/[0.04]">
+              <td className="py-2 pr-4 text-zinc-300">정부 지출 (연간)</td>
+              <td className="py-2 pr-4">
+                FRED <code className="text-emerald-300">FYONET</code>
+              </td>
+              <td className="py-2">FY 종료 후 10월 (전년 FY 확정치)</td>
+            </tr>
+            <tr className="border-b border-white/[0.04]">
+              <td className="py-2 pr-4 text-zinc-300">정부 지출 (월별)</td>
+              <td className="py-2 pr-4">U.S. Treasury MTS API</td>
+              <td className="py-2">매월 12일경 (전월)</td>
+            </tr>
+            <tr className="border-b border-white/[0.04]">
+              <td className="py-2 pr-4 text-zinc-300">PCE 소비 (연간)</td>
+              <td className="py-2 pr-4">
+                FRED <code className="text-emerald-300">PCECA</code>
+              </td>
+              <td className="py-2">매년 1분기 (전년 확정)</td>
+            </tr>
+            <tr className="border-b border-white/[0.04]">
+              <td className="py-2 pr-4 text-zinc-300">PCE 소비 (월별)</td>
+              <td className="py-2 pr-4">
+                FRED <code className="text-emerald-300">PCE</code>
+              </td>
+              <td className="py-2">매월 4번째 금요일경 (전월)</td>
+            </tr>
+            <tr>
+              <td className="py-2 pr-4 text-zinc-300">GDP 대비 부채</td>
+              <td className="py-2 pr-4">
+                FRED <code className="text-emerald-300">GFDEGDQ188S</code>
+              </td>
+              <td className="py-2">분기 종료 후 약 6주</td>
+            </tr>
+          </tbody>
+        </table>
+        <p className="text-zinc-500">
+          회계연도(FY)는 전년 10/1 ~ 당해 9/30. PCE는 캘린더 연도 기준이라
+          FY와 정확히 일치하지 않지만, 분석상 같은 라벨(년도) 옆에 표기.
+          대통령은 FY 종료(9/30) 시점 기준.
+        </p>
+      </div>
+    </details>
   );
 }
 

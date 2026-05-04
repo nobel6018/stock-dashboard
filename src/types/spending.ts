@@ -3,6 +3,10 @@ export interface AnnualSpendingPoint {
   fiscalYear: number;
   /** 정부 지출 (조 USD, FYONET) */
   outlaysT: number;
+  /** PCE 개인소비지출 (조 USD, PCECA, 캘린더 연도 기준) */
+  pceT: number | null;
+  /** 소비 대비 지출 비중 (%, outlaysT / pceT × 100) */
+  outlaysToPcePct: number | null;
   /** GDP 대비 부채 비율 (%, GFDEGDQ188S, FY-end Q3 값) */
   debtToGdpPct: number | null;
   /** YoY 변화율 (%) */

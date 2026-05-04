@@ -1,15 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface BarPoint {
   label: string;
   value: number;
-  /** 0~6, 정당 색상 등 */
   color?: string;
-  /** 강조 표시 */
   highlight?: boolean;
-  /** 클릭 핸들러용 키 */
   key?: string | number;
 }
 
@@ -18,7 +15,6 @@ interface SpendingBarChartProps {
   height?: number;
   yLabel?: string;
   onBarClick?: (key: string | number) => void;
-  /** 값 포매터 (툴팁용) */
   formatValue?: (v: number) => string;
 }
 
@@ -29,37 +25,70 @@ export function SpendingBarChart({
   onBarClick,
   formatValue = (v) => v.toFixed(2),
 }: SpendingBarChartProps) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [width, setWidth] = useState(800);
   const [hover, setHover] = useState<number | null>(null);
-  if (data.length === 0) return null;
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const w = Math.floor(entry.contentRect.width);
+        if (w > 0) setWidth(w);
+      }
+    });
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  if (data.length === 0) {
+    return <div ref={containerRef} style={{ height }} />;
+  }
 
   const maxValue = Math.max(...data.map((d) => d.value));
-  const padding = { top: 10, bottom: 28, left: 44, right: 8 };
+  const padding = { top: 16, bottom: 28, left: 52, right: 12 };
   const innerHeight = height - padding.top - padding.bottom;
-  const barGap = 2;
-  // viewBox에서 width는 100을 기본으로 두고 stretch
-  const width = 600;
-  const innerWidth = width - padding.left - padding.right;
-  const barWidth = (innerWidth - barGap * (data.length - 1)) / data.length;
+  const innerWidth = Math.max(width - padding.left - padding.right, 1);
+  const barGap = data.length > 80 ? 1 : 2;
+  const barWidth = Math.max(
+    (innerWidth - barGap * (data.length - 1)) / data.length,
+    1,
+  );
 
-  // 가로 grid lines
+  // Y축 tick: 4단계, "보기 좋은" 반올림
+  const niceMax = niceCeil(maxValue);
   const gridSteps = 4;
   const gridValues = Array.from({ length: gridSteps + 1 }, (_, i) =>
-    Math.round((maxValue * i) / gridSteps * 10) / 10,
+    (niceMax * i) / gridSteps,
   );
 
   function yScale(v: number) {
-    return padding.top + innerHeight - (v / maxValue) * innerHeight;
+    return padding.top + innerHeight - (v / niceMax) * innerHeight;
   }
 
   return (
-    <div className="w-full">
+    <div ref={containerRef} className="w-full" style={{ minHeight: height }}>
       <svg
+        width={width}
+        height={height}
         viewBox={`0 0 ${width} ${height}`}
-        preserveAspectRatio="none"
-        className="w-full"
-        style={{ height }}
+        style={{ display: "block" }}
       >
-        {/* grid + Y labels */}
+        {/* Y축 라벨 (좌상단) */}
+        {yLabel && (
+          <text
+            x={4}
+            y={padding.top - 4}
+            fontSize={10}
+            fill="#a1a1aa"
+            textAnchor="start"
+          >
+            {yLabel}
+          </text>
+        )}
+
+        {/* grid + Y tick labels */}
         {gridValues.map((v) => {
           const y = yScale(v);
           return (
@@ -75,7 +104,7 @@ export function SpendingBarChart({
               <text
                 x={padding.left - 6}
                 y={y + 3}
-                fontSize={9}
+                fontSize={10}
                 fill="#71717a"
                 textAnchor="end"
               >
@@ -84,16 +113,6 @@ export function SpendingBarChart({
             </g>
           );
         })}
-        {yLabel && (
-          <text
-            x={padding.left - 36}
-            y={padding.top + 4}
-            fontSize={9}
-            fill="#a1a1aa"
-          >
-            {yLabel}
-          </text>
-        )}
 
         {/* bars */}
         {data.map((d, i) => {
@@ -102,7 +121,6 @@ export function SpendingBarChart({
           const h = padding.top + innerHeight - y;
           const isHover = hover === i;
           const fill = d.color ?? "#22d3ee";
-          const isHighlight = d.highlight;
           return (
             <g
               key={d.key ?? i}
@@ -111,58 +129,76 @@ export function SpendingBarChart({
               onClick={() =>
                 onBarClick && d.key !== undefined && onBarClick(d.key)
               }
-              style={{
-                cursor: onBarClick ? "pointer" : "default",
-              }}
+              style={{ cursor: onBarClick ? "pointer" : "default" }}
             >
               <rect
                 x={x}
                 y={y}
                 width={barWidth}
-                height={h}
+                height={Math.max(h, 0.5)}
                 fill={fill}
-                opacity={isHover ? 1 : isHighlight ? 0.95 : 0.7}
-                rx={1}
+                opacity={isHover ? 1 : d.highlight ? 0.95 : 0.75}
+                rx={Math.min(barWidth / 4, 1.5)}
               />
-              {/* hover label */}
-              {isHover && (
-                <g>
-                  <rect
-                    x={Math.min(x - 20, width - padding.right - 80)}
-                    y={Math.max(y - 28, padding.top)}
-                    width={80}
-                    height={22}
-                    fill="rgba(0,0,0,0.85)"
-                    stroke="rgba(255,255,255,0.1)"
-                    rx={3}
-                  />
-                  <text
-                    x={Math.min(x - 20, width - padding.right - 80) + 40}
-                    y={Math.max(y - 14, padding.top + 14)}
-                    fontSize={10}
-                    fill="white"
-                    textAnchor="middle"
-                    fontWeight={500}
-                  >
-                    {d.label} · {formatValue(d.value)}
-                  </text>
-                </g>
-              )}
             </g>
           );
         })}
 
-        {/* x labels (보기 좋게 일부만) */}
+        {/* Hover tooltip — 마지막에 그려서 항상 위에 위치 */}
+        {hover !== null &&
+          (() => {
+            const d = data[hover];
+            const cx =
+              padding.left + hover * (barWidth + barGap) + barWidth / 2;
+            const y = yScale(d.value);
+            const tooltipW = 110;
+            const tooltipH = 22;
+            const tx = Math.max(
+              padding.left,
+              Math.min(cx - tooltipW / 2, width - padding.right - tooltipW),
+            );
+            const ty = Math.max(padding.top - 2, y - tooltipH - 4);
+            return (
+              <g pointerEvents="none">
+                <rect
+                  x={tx}
+                  y={ty}
+                  width={tooltipW}
+                  height={tooltipH}
+                  fill="rgba(0,0,0,0.92)"
+                  stroke="rgba(255,255,255,0.12)"
+                  rx={4}
+                />
+                <text
+                  x={tx + tooltipW / 2}
+                  y={ty + 14}
+                  fontSize={11}
+                  fill="white"
+                  textAnchor="middle"
+                  fontWeight={500}
+                >
+                  {d.label} · {formatValue(d.value)}
+                </text>
+              </g>
+            );
+          })()}
+
+        {/* X축 라벨 (간격 조절) */}
         {data.map((d, i) => {
-          const stride = Math.max(1, Math.ceil(data.length / 12));
+          // 가독성: 라벨 한 글자 폭 ~7px 가정. 충돌 없도록 stride 조절
+          const minLabelSpacing = 60;
+          const stride = Math.max(
+            1,
+            Math.ceil((data.length * minLabelSpacing) / innerWidth),
+          );
           if (i % stride !== 0 && i !== data.length - 1) return null;
           const x = padding.left + i * (barWidth + barGap) + barWidth / 2;
           return (
             <text
               key={`x-${i}`}
               x={x}
-              y={height - 10}
-              fontSize={9}
+              y={height - 8}
+              fontSize={10}
               fill="#a1a1aa"
               textAnchor="middle"
             >
@@ -173,4 +209,19 @@ export function SpendingBarChart({
       </svg>
     </div>
   );
+}
+
+/** 차트 Y축 max를 보기 좋게 올림. 예: 7.01 → 8, 12.3 → 15, 0.92 → 1 */
+function niceCeil(value: number): number {
+  if (value <= 0) return 1;
+  const exp = Math.floor(Math.log10(value));
+  const base = Math.pow(10, exp);
+  const norm = value / base;
+  let nice: number;
+  if (norm <= 1) nice = 1;
+  else if (norm <= 2) nice = 2;
+  else if (norm <= 2.5) nice = 2.5;
+  else if (norm <= 5) nice = 5;
+  else nice = 10;
+  return nice * base;
 }

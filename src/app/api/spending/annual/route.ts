@@ -14,9 +14,10 @@ export const revalidate = 86400;
  */
 export async function GET() {
   try {
-    const [outlaysRaw, debtRatioRaw] = await Promise.all([
+    const [outlaysRaw, debtRatioRaw, pceRaw] = await Promise.all([
       fetchFredSeries("FYONET"),
       fetchFredSeries("GFDEGDQ188S"),
+      fetchFredSeries("PCECA"),
     ]);
 
     // 9월 30일 또는 같은 회계연도 종료일 → fiscalYear
@@ -38,6 +39,14 @@ export async function GET() {
       }
     }
 
+    // PCECA: 캘린더 연도(1/1) 데이터. billions → trillions.
+    // FY 라벨 X에 캘린더 연도 X PCE를 매핑 (이미지 표 관행).
+    const pceByYear = new Map<number, number>();
+    for (const p of pceRaw) {
+      const date = new Date(p.time);
+      pceByYear.set(date.getUTCFullYear(), p.value / 1000);
+    }
+
     const fiscalYears = Array.from(outlaysByFY.keys()).sort((a, b) => b - a);
 
     const data: AnnualSpendingPoint[] = fiscalYears.map((fy) => {
@@ -48,10 +57,14 @@ export async function GET() {
           ? ((outlaysT - prevOutlays) / prevOutlays) * 100
           : null;
       const president = getPresidentByFiscalYear(fy);
+      const pceT = pceByYear.get(fy) ?? null;
+      const outlaysToPcePct = pceT !== null && pceT > 0 ? (outlaysT / pceT) * 100 : null;
 
       return {
         fiscalYear: fy,
         outlaysT,
+        pceT,
+        outlaysToPcePct,
         debtToGdpPct: debtRatioByFY.get(fy) ?? null,
         yoyChangePct,
         president: president?.name ?? null,
