@@ -2,21 +2,31 @@
   {
     "fileDate": "20260107",
     "title": "1월 사전학습자료",
-    "pageCount": 17
+    "pageCount": 17,
+    "category": "regular"
   },
   {
     "fileDate": "20260208",
     "title": "2월 사전학습자료",
-    "pageCount": 18
+    "pageCount": 18,
+    "category": "regular"
   },
   {
     "fileDate": "20260301",
     "title": "3월 사전학습자료",
-    "pageCount": 21
+    "pageCount": 21,
+    "category": "regular"
   },
   {
     "fileDate": "20260415",
     "title": "4월 사전학습자료",
-    "pageCount": 21
+    "pageCount": 21,
+    "category": "regular"
+  },
+  {
+    "category": "advanced",
+    "fileDate": "20260408",
+    "title": "레벨업자료집 채권편",
+    "pageCount": 45
   }
 ]
