@@ -1,24 +1,63 @@
 "use client";
 
-import { Suspense } from "react";
+import { Suspense, useMemo } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { LETTERS, type Letter } from "@/lib/data/buffett/letters";
+import {
+  ALL_TAGS,
+  LETTERS,
+  TAG_DESCRIPTIONS,
+  type Letter,
+  type Tag,
+} from "@/lib/data/buffett/letters";
+
+const TAG_COLORS: Record<Tag, string> = {
+  "사이클 역행": "border-emerald-400/30 bg-emerald-400/[0.06] text-emerald-300",
+  "위기·공포": "border-rose-400/30 bg-rose-400/[0.06] text-rose-300",
+  "거품·탐욕": "border-amber-400/30 bg-amber-400/[0.06] text-amber-300",
+  장기보유: "border-sky-400/30 bg-sky-400/[0.06] text-sky-300",
+  자산배분: "border-violet-400/30 bg-violet-400/[0.06] text-violet-300",
+  시장심리: "border-fuchsia-400/30 bg-fuchsia-400/[0.06] text-fuchsia-300",
+  레버리지: "border-orange-400/30 bg-orange-400/[0.06] text-orange-300",
+  인플레이션: "border-teal-400/30 bg-teal-400/[0.06] text-teal-300",
+};
 
 function BuffettContent() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const selectedYear = searchParams.get("year");
+  const tagsParam = searchParams.get("tags");
+  const selectedTags = useMemo<Tag[]>(
+    () =>
+      tagsParam
+        ? (tagsParam.split(",").filter((t) => ALL_TAGS.includes(t as Tag)) as Tag[])
+        : [],
+    [tagsParam]
+  );
 
   const selected = LETTERS.find((l) => String(l.year) === selectedYear);
 
   function navigateTo(year: number) {
-    router.push(`/buffett?year=${year}`);
+    const qs = selectedTags.length ? `&tags=${selectedTags.join(",")}` : "";
+    router.push(`/buffett?year=${year}${qs}`);
     if (typeof window !== "undefined") {
       window.scrollTo({ top: 0 });
     }
   }
 
   function goBack() {
+    const qs = selectedTags.length ? `?tags=${selectedTags.join(",")}` : "";
+    router.push(`/buffett${qs}`);
+  }
+
+  function toggleTag(tag: Tag) {
+    const next = selectedTags.includes(tag)
+      ? selectedTags.filter((t) => t !== tag)
+      : [...selectedTags, tag];
+    const qs = next.length ? `?tags=${next.join(",")}` : "";
+    router.push(`/buffett${qs}`);
+  }
+
+  function clearTags() {
     router.push("/buffett");
   }
 
@@ -27,71 +66,177 @@ function BuffettContent() {
       <div className="mb-6">
         <h1 className="text-xl font-semibold">워렌 버핏 핵심 서한 발췌</h1>
         <p className="mt-1 text-sm text-zinc-500">
-          사이클 역행 매매의 원전 — 1986·1987·1996·2008·2009·2017
+          사이클 역행 매매의 원전 — 1986·1987·1996·1999·2002·2008·2009·2011·2013·2017
         </p>
       </div>
 
-      {!selected ? <LetterList onSelect={navigateTo} /> : (
+      {!selected ? (
+        <LetterList
+          selectedTags={selectedTags}
+          onSelect={navigateTo}
+          onToggleTag={toggleTag}
+          onClearTags={clearTags}
+        />
+      ) : (
         <LetterDetail letter={selected} onBack={goBack} onSelect={navigateTo} />
       )}
     </div>
   );
 }
 
-function LetterList({ onSelect }: { onSelect: (year: number) => void }) {
+function TagFilter({
+  selectedTags,
+  onToggleTag,
+  onClearTags,
+}: {
+  selectedTags: Tag[];
+  onToggleTag: (t: Tag) => void;
+  onClearTags: () => void;
+}) {
   return (
-    <section>
-      <h2 className="mb-4 text-sm font-medium uppercase tracking-wider text-zinc-500">
-        서한 목록
-      </h2>
-      <div className="grid grid-cols-1 gap-3">
-        {LETTERS.map((letter) => {
-          const decade = Math.floor(letter.year / 10) * 10;
-          const accent =
-            decade === 1980
-              ? { text: "text-emerald-400", border: "border-emerald-400/20" }
-              : decade === 1990
-                ? { text: "text-sky-400", border: "border-sky-400/20" }
-                : decade === 2000
-                  ? { text: "text-amber-400", border: "border-amber-400/20" }
-                  : { text: "text-rose-400", border: "border-rose-400/20" };
-
+    <section className="mb-5 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+      <div className="mb-3 flex items-center justify-between">
+        <div>
+          <div className="text-xs font-medium uppercase tracking-wider text-zinc-400">
+            목적별로 골라 읽기
+          </div>
+          <div className="mt-0.5 text-[11px] text-zinc-500">
+            태그를 여러 개 선택하면 OR 조건으로 필터링됩니다
+          </div>
+        </div>
+        {selectedTags.length > 0 && (
+          <button
+            onClick={onClearTags}
+            className="text-[11px] text-zinc-500 underline-offset-2 hover:text-zinc-300 hover:underline"
+          >
+            전체 해제
+          </button>
+        )}
+      </div>
+      <div className="flex flex-wrap gap-1.5">
+        {ALL_TAGS.map((tag) => {
+          const active = selectedTags.includes(tag);
           return (
             <button
-              key={letter.year}
-              onClick={() => onSelect(letter.year)}
-              className={`group flex items-start gap-4 rounded-xl border ${accent.border} bg-white/[0.02] p-4 text-left transition-all hover:border-white/[0.12] hover:bg-white/[0.06]`}
+              key={tag}
+              onClick={() => onToggleTag(tag)}
+              title={TAG_DESCRIPTIONS[tag]}
+              className={`rounded-full border px-2.5 py-1 text-[11px] transition-all ${
+                active
+                  ? TAG_COLORS[tag]
+                  : "border-white/[0.08] bg-transparent text-zinc-500 hover:border-white/[0.15] hover:text-zinc-300"
+              }`}
             >
-              <div
-                className={`flex h-12 w-14 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-sm font-bold ${accent.text}`}
-              >
-                {letter.year}
-              </div>
-              <div className="min-w-0 flex-1">
-                <div className="text-sm font-medium text-zinc-200 group-hover:text-white">
-                  {letter.title}
-                </div>
-                <div className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-500">
-                  {letter.hook}
-                </div>
-              </div>
-              <svg
-                className="mt-1 h-4 w-4 shrink-0 text-zinc-600 group-hover:text-zinc-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
+              {tag}
             </button>
           );
         })}
       </div>
+    </section>
+  );
+}
+
+function LetterList({
+  selectedTags,
+  onSelect,
+  onToggleTag,
+  onClearTags,
+}: {
+  selectedTags: Tag[];
+  onSelect: (year: number) => void;
+  onToggleTag: (t: Tag) => void;
+  onClearTags: () => void;
+}) {
+  const filtered = useMemo(() => {
+    if (selectedTags.length === 0) return LETTERS;
+    return LETTERS.filter((l) =>
+      l.tags.some((t) => selectedTags.includes(t))
+    );
+  }, [selectedTags]);
+
+  return (
+    <>
+      <TagFilter
+        selectedTags={selectedTags}
+        onToggleTag={onToggleTag}
+        onClearTags={onClearTags}
+      />
+
+      <h2 className="mb-3 flex items-baseline justify-between text-sm font-medium uppercase tracking-wider text-zinc-500">
+        <span>서한 목록</span>
+        <span className="text-[11px] normal-case tracking-normal text-zinc-600">
+          {filtered.length}편 / 전체 {LETTERS.length}편
+        </span>
+      </h2>
+
+      {filtered.length === 0 ? (
+        <div className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-8 text-center text-sm text-zinc-500">
+          선택한 태그에 해당하는 서한이 없습니다
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 gap-3">
+          {filtered.map((letter) => {
+            const decade = Math.floor(letter.year / 10) * 10;
+            const accent =
+              decade === 1980
+                ? { text: "text-emerald-400", border: "border-emerald-400/20" }
+                : decade === 1990
+                  ? { text: "text-sky-400", border: "border-sky-400/20" }
+                  : decade === 2000
+                    ? { text: "text-amber-400", border: "border-amber-400/20" }
+                    : { text: "text-rose-400", border: "border-rose-400/20" };
+
+            return (
+              <button
+                key={letter.year}
+                onClick={() => onSelect(letter.year)}
+                className={`group flex items-start gap-4 rounded-xl border ${accent.border} bg-white/[0.02] p-4 text-left transition-all hover:border-white/[0.12] hover:bg-white/[0.06]`}
+              >
+                <div
+                  className={`flex h-12 w-14 shrink-0 items-center justify-center rounded-lg bg-white/[0.04] text-sm font-bold ${accent.text}`}
+                >
+                  {letter.year}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium text-zinc-200 group-hover:text-white">
+                    {letter.title}
+                  </div>
+                  <div className="mt-1 line-clamp-2 text-xs leading-relaxed text-zinc-500">
+                    {letter.hook}
+                  </div>
+                  <div className="mt-2 flex flex-wrap gap-1">
+                    {letter.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className={`rounded-full border px-1.5 py-0.5 text-[10px] ${
+                          selectedTags.includes(tag)
+                            ? TAG_COLORS[tag]
+                            : "border-white/[0.08] bg-white/[0.02] text-zinc-500"
+                        }`}
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+                <svg
+                  className="mt-1 h-4 w-4 shrink-0 text-zinc-600 group-hover:text-zinc-400"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </button>
+            );
+          })}
+        </div>
+      )}
 
       <div className="mt-6 rounded-xl border border-white/[0.06] bg-white/[0.02] p-4 text-xs leading-relaxed text-zinc-400">
         <p className="mb-2 font-medium text-zinc-300">번역에 관하여</p>
@@ -102,7 +247,7 @@ function LetterList({ onSelect }: { onSelect: (year: number) => void }) {
           핵심 단락만 발췌. 출처는 각 서한 페이지의 링크 참조.
         </p>
       </div>
-    </section>
+    </>
   );
 }
 
@@ -149,6 +294,16 @@ function LetterDetail({
           <h2 className="mt-1.5 text-xl font-semibold text-white md:text-2xl">
             {letter.title}
           </h2>
+          <div className="mt-2.5 flex flex-wrap gap-1.5">
+            {letter.tags.map((tag) => (
+              <span
+                key={tag}
+                className={`rounded-full border px-2 py-0.5 text-[11px] ${TAG_COLORS[tag]}`}
+              >
+                {tag}
+              </span>
+            ))}
+          </div>
           <p className="mt-3 text-sm leading-relaxed text-zinc-300">
             {letter.hook}
           </p>
