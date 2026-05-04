@@ -349,15 +349,34 @@ function LetterDetail({
         </div>
 
         <footer className="mt-8 border-t border-white/[0.06] pt-4 text-xs text-zinc-500">
+          <div className="mb-1 text-[11px] uppercase tracking-wider text-zinc-600">
+            원문 (직접 링크)
+          </div>
           <a
             href={letter.sourceUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 hover:text-zinc-300"
+            className="inline-flex items-center gap-2 hover:text-zinc-300"
           >
-            원문 보기 (berkshirehathaway.com)
+            {(() => {
+              const isPdf = letter.sourceUrl.toLowerCase().endsWith(".pdf");
+              return (
+                <span
+                  className={`rounded border px-1.5 py-0.5 font-mono text-[10px] ${
+                    isPdf
+                      ? "border-rose-400/30 bg-rose-400/[0.06] text-rose-300"
+                      : "border-sky-400/30 bg-sky-400/[0.06] text-sky-300"
+                  }`}
+                >
+                  {isPdf ? "PDF" : "HTML"}
+                </span>
+              );
+            })()}
+            <span className="break-all font-mono text-[11px]">
+              {letter.sourceUrl.replace(/^https?:\/\//, "")}
+            </span>
             <svg
-              className="h-3 w-3"
+              className="h-3 w-3 shrink-0"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
