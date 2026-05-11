@@ -42,7 +42,7 @@ body {
 }
 .summary-content h1 { font-size: 1.3rem; border-bottom: 1px solid rgba(255,255,255,0.06); padding-bottom: 0.4rem; }
 .summary-content h2 { font-size: 1.15rem; }
-.summary-content h3 { font-size: 1.05rem; color: #a1a1aa; }
+.summary-content h3 { font-size: 1.05rem; color: #f4f4f5; font-weight: 700; }
 .summary-content ul,
 .summary-content ol {
   margin: 0.5rem 0 1rem 1.5rem;
