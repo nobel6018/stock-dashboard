@@ -15,6 +15,7 @@ import {
   Quote,
   PieChart,
   ShieldAlert,
+  Sparkles,
   TrendingUp,
 } from "lucide-react";
 
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { href: "/crisis", label: "위기 신호", icon: ShieldAlert },
   { href: "/spending", label: "정부 지출", icon: Landmark },
   { href: "/portfolio", label: "13F 포트폴리오", icon: Briefcase },
+  { href: "/13f-analysis", label: "13F 분기 변동", icon: Sparkles },
   { href: "/nps", label: "국민연금", icon: Building2 },
   { href: "/summary", label: "박종훈 요약본", icon: BookOpen },
   { href: "/study", label: "사전학습자료", icon: FileText },

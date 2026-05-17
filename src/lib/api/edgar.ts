@@ -11,6 +11,14 @@ interface EdgarFiling {
 }
 
 export async function fetchLatest13F(cik: string): Promise<EdgarFiling | null> {
+  const filings = await fetchRecent13Fs(cik, 1);
+  return filings[0] ?? null;
+}
+
+export async function fetchRecent13Fs(
+  cik: string,
+  count = 2,
+): Promise<EdgarFiling[]> {
   const res = await fetch(`${EDGAR_BASE}/submissions/CIK${cik}.json`, {
     headers: { "User-Agent": USER_AGENT },
     next: { revalidate: 86400 },
@@ -22,19 +30,20 @@ export async function fetchLatest13F(cik: string): Promise<EdgarFiling | null> {
 
   const data = await res.json();
   const recent = data.filings.recent;
+  const filings: EdgarFiling[] = [];
 
-  for (let i = 0; i < recent.form.length; i++) {
+  for (let i = 0; i < recent.form.length && filings.length < count; i++) {
     if (recent.form[i] === "13F-HR") {
-      return {
+      filings.push({
         accessionNumber: recent.accessionNumber[i],
         filingDate: recent.filingDate[i],
         reportDate: recent.reportDate[i],
         primaryDocument: recent.primaryDocument[i],
-      };
+      });
     }
   }
 
-  return null;
+  return filings;
 }
 
 export async function fetch13FHoldings(
@@ -181,5 +190,135 @@ export async function getInvestorPortfolio(
     quarterEnd: filing.reportDate,
     totalValue: holdings.reduce((sum, h) => sum + h.value, 0),
     holdings,
+  };
+}
+
+export interface PortfolioChange {
+  name: string;
+  cusip?: string;
+  currValue: number;
+  prevValue: number;
+  currShares: number;
+  prevShares: number;
+  currWeight: number;
+  prevWeight: number;
+  changeType: "new" | "exited" | "increased" | "decreased" | "unchanged";
+  sharesPct: number;
+}
+
+export interface PortfolioDiff {
+  investorName: string;
+  investorNameKo: string;
+  cik: string;
+  currQuarter: string;
+  prevQuarter: string;
+  currTotal: number;
+  prevTotal: number;
+  currCount: number;
+  prevCount: number;
+  newPositions: PortfolioChange[];
+  exited: PortfolioChange[];
+  increased: PortfolioChange[];
+  decreased: PortfolioChange[];
+  topCurr: Holding[];
+}
+
+export async function getInvestorDiff(
+  investorName: string,
+  investorNameKo: string,
+  cik: string,
+): Promise<PortfolioDiff | null> {
+  const filings = await fetchRecent13Fs(cik, 2);
+  if (filings.length < 2) return null;
+
+  const [currFiling, prevFiling] = filings;
+  const [curr, prev] = await Promise.all([
+    fetch13FHoldings(cik, currFiling.accessionNumber),
+    fetch13FHoldings(cik, prevFiling.accessionNumber),
+  ]);
+
+  const prevMap = new Map(prev.map((h) => [h.cusip || h.name, h]));
+  const currMap = new Map(curr.map((h) => [h.cusip || h.name, h]));
+
+  const newPositions: PortfolioChange[] = [];
+  const exited: PortfolioChange[] = [];
+  const increased: PortfolioChange[] = [];
+  const decreased: PortfolioChange[] = [];
+
+  for (const c of curr) {
+    const key = c.cusip || c.name;
+    const p = prevMap.get(key);
+    if (!p) {
+      newPositions.push({
+        name: c.name,
+        cusip: c.cusip,
+        currValue: c.value,
+        prevValue: 0,
+        currShares: c.shares,
+        prevShares: 0,
+        currWeight: c.weight,
+        prevWeight: 0,
+        changeType: "new",
+        sharesPct: 100,
+      });
+    } else {
+      const sharesPct =
+        p.shares > 0 ? ((c.shares - p.shares) / p.shares) * 100 : 0;
+      if (Math.abs(sharesPct) < 5) continue;
+      const change: PortfolioChange = {
+        name: c.name,
+        cusip: c.cusip,
+        currValue: c.value,
+        prevValue: p.value,
+        currShares: c.shares,
+        prevShares: p.shares,
+        currWeight: c.weight,
+        prevWeight: p.weight,
+        changeType: sharesPct > 0 ? "increased" : "decreased",
+        sharesPct,
+      };
+      if (sharesPct > 0) increased.push(change);
+      else decreased.push(change);
+    }
+  }
+
+  for (const p of prev) {
+    const key = p.cusip || p.name;
+    if (!currMap.has(key)) {
+      exited.push({
+        name: p.name,
+        cusip: p.cusip,
+        currValue: 0,
+        prevValue: p.value,
+        currShares: 0,
+        prevShares: p.shares,
+        currWeight: 0,
+        prevWeight: p.weight,
+        changeType: "exited",
+        sharesPct: -100,
+      });
+    }
+  }
+
+  newPositions.sort((a, b) => b.currValue - a.currValue);
+  exited.sort((a, b) => b.prevValue - a.prevValue);
+  increased.sort((a, b) => b.currValue - b.prevValue - (a.currValue - a.prevValue));
+  decreased.sort((a, b) => a.currValue - a.prevValue - (b.currValue - b.prevValue));
+
+  return {
+    investorName,
+    investorNameKo,
+    cik,
+    currQuarter: currFiling.reportDate,
+    prevQuarter: prevFiling.reportDate,
+    currTotal: curr.reduce((s, h) => s + h.value, 0),
+    prevTotal: prev.reduce((s, h) => s + h.value, 0),
+    currCount: curr.length,
+    prevCount: prev.length,
+    newPositions,
+    exited,
+    increased,
+    decreased,
+    topCurr: curr.slice(0, 10),
   };
 }
